@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#10100f">
+    <title>Painel — Hype Elite</title>
+    <link rel="icon" href="../assets/img/logo-he.png" type="image/png">
+    <link rel="stylesheet" href="../assets/css/panel.css">
+    <script src="../assets/js/store-data.js" defer></script>
+    <script src="../assets/js/panel.js" defer></script>
+  </head>
+  <body>
+    <div class="panel-shell" data-panel-shell>
+      <aside class="panel-sidebar">
+        <a class="panel-brand" href="../index.html"><img src="../assets/img/logo-he.png" alt=""><span><strong>Hype Elite</strong><span>Painel de gestão</span></span></a>
+        <nav class="panel-nav" aria-label="Administração da loja">
+          <p class="panel-nav__label">Operação</p>
+          <button type="button" data-panel-nav="overview"><span data-icon="dashboard"></span><span>Visão geral</span></button>
+          <button type="button" data-panel-nav="orders"><span data-icon="orders"></span><span>Pedidos</span><span class="panel-nav__badge">0</span></button>
+          <button type="button" data-panel-nav="products"><span data-icon="products"></span><span>Produtos</span><span class="panel-nav__badge">7</span></button>
+          <button type="button" data-panel-nav="categories"><span data-icon="categories"></span><span>Categorias</span><span class="panel-nav__badge">8</span></button>
+          <button type="button" data-panel-nav="inventory"><span data-icon="inventory"></span><span>Estoque</span></button>
+          <p class="panel-nav__label">Negócio</p>
+          <button type="button" data-panel-nav="finance"><span data-icon="finance"></span><span>Financeiro</span></button>
+          <button type="button" data-panel-nav="customers"><span data-icon="customers"></span><span>Clientes</span></button>
+          <button type="button" data-panel-nav="settings"><span data-icon="settings"></span><span>Configurações</span></button>
+        </nav>
+        <div class="panel-sidebar__foot">Estrutura visual inicial.<br>Login e banco de dados pendentes.</div>
+      </aside>
+      <button class="panel-overlay" type="button" data-menu-panel-close aria-label="Fechar menu"></button>
+
+      <div class="panel-main">
+        <header class="panel-topbar">
+          <div class="panel-topbar__left"><button class="panel-menu-button" type="button" data-menu-panel-open aria-label="Abrir menu"><span data-icon="menu"></span></button><span class="panel-status">Ambiente em configuração</span></div>
+          <div class="panel-topbar__right"><a class="panel-visit" href="../index.html" target="_blank" rel="noopener"><span>Ver loja</span><span data-icon="external"></span></a></div>
+        </header>
+
+        <main class="panel-content">
+          <div class="panel-page-head">
+            <div><p class="panel-kicker" data-panel-subtitle></p><h1 data-panel-title>Visão geral</h1></div>
+            <button class="panel-button" type="button" data-future-action><span data-icon="plus"></span>Novo produto</button>
+          </div>
+          <div class="panel-note">Esta tela é a estrutura visual do painel. Dados reais, autenticação e alterações no catálogo só serão ativados após a conexão com um banco de dados seguro.</div>
+
+          <section class="panel-view" data-view="overview">
+            <div class="metric-grid">
+              <article class="metric-card"><div class="metric-card__top"><span>Faturamento</span><span class="metric-card__icon" data-icon="finance"></span></div><div><strong>R$ 0,00</strong><small>Nenhuma venda registrada</small></div></article>
+              <article class="metric-card"><div class="metric-card__top"><span>Pedidos</span><span class="metric-card__icon" data-icon="orders"></span></div><div><strong>0</strong><small>0 aguardando ação</small></div></article>
+              <article class="metric-card"><div class="metric-card__top"><span>Produtos</span><span class="metric-card__icon" data-icon="products"></span></div><div><strong>7</strong><small>Todos em rascunho</small></div></article>
+              <article class="metric-card"><div class="metric-card__top"><span>Categorias</span><span class="metric-card__icon" data-icon="categories"></span></div><div><strong>8</strong><small>4 atuais · 4 próximas fases</small></div></article>
+            </div>
+            <div class="panel-grid">
+              <article class="panel-card"><header class="panel-card__head"><h2>Pedidos recentes</h2><span>Últimos 30 dias</span></header><div class="empty-state"><div><span class="empty-state__icon" data-icon="bag"></span><h3>Nenhum pedido por enquanto</h3><p>Os pedidos aparecerão aqui assim que o checkout e o banco de dados forem conectados.</p></div></div></article>
+              <article class="panel-card"><header class="panel-card__head"><h2>Resumo financeiro</h2><span>Período atual</span></header><div class="finance-list"><div class="finance-row"><span>Entradas</span><strong>R$ 0,00</strong></div><div class="finance-row"><span>Custos de produtos</span><strong>R$ 0,00</strong></div><div class="finance-row"><span>Frete e taxas</span><strong>R$ 0,00</strong></div><div class="finance-row finance-row--total"><span>Saldo</span><strong>R$ 0,00</strong></div></div></article>
+            </div>
+          </section>
+
+          <section class="panel-view" data-view="products" hidden>
+            <article class="panel-card"><header class="panel-card__head"><h2>Estrutura do catálogo</h2><span>Itens demonstrativos</span></header><div class="data-table-wrap"><table class="data-table"><thead><tr><th>Produto</th><th>Categoria</th><th>Variações</th><th>Status</th></tr></thead><tbody data-panel-products></tbody></table></div></article>
+          </section>
+
+          <section class="panel-view" data-view="categories" hidden>
+            <article class="panel-card"><header class="panel-card__head"><h2>Categorias da loja</h2><span>Estrutura escalável</span></header><div class="data-table-wrap"><table class="data-table"><thead><tr><th>Categoria</th><th>Produtos</th><th>Status</th></tr></thead><tbody data-panel-categories></tbody></table></div></article>
+          </section>
+
+          <section class="panel-view" data-view="orders" hidden><div class="future-view"><div class="future-view__inner"><h2>Gestão de pedidos</h2><p>Esta área receberá status, pagamento, dados de envio, rastreamento e histórico quando o backend estiver conectado.</p></div></div></section>
+          <section class="panel-view" data-view="inventory" hidden><div class="future-view"><div class="future-view__inner"><h2>Estoque e disponibilidade</h2><p>A estrutura será preparada para produtos sob encomenda, disponibilidade por tamanho e alertas de reposição.</p></div></div></section>
+          <section class="panel-view" data-view="finance" hidden><div class="future-view"><div class="future-view__inner"><h2>Entradas, saídas e resultado</h2><p>O financeiro reunirá venda recebida, compra no fornecedor, frete, taxas, embalagem, reembolsos e lucro por pedido.</p></div></div></section>
+          <section class="panel-view" data-view="customers" hidden><div class="future-view"><div class="future-view__inner"><h2>Clientes</h2><p>Histórico de pedidos e dados essenciais de atendimento entrarão aqui com controle de acesso.</p></div></div></section>
+          <section class="panel-view" data-view="settings" hidden><div class="future-view"><div class="future-view__inner"><h2>Configurações da loja</h2><p>Pagamentos, frete, dados da empresa, canais de atendimento e integrações serão configurados nesta área.</p></div></div></section>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

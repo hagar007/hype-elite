@@ -1,0 +1,17 @@
+{
+  "name": "Hype Elite",
+  "short_name": "Hype Elite",
+  "description": "Futebol, estilo e atitude.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    {
+      "src": "assets/img/logo-he.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
