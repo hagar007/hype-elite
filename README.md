@@ -30,7 +30,7 @@ hype-elite/
 │   ├── css/
 │   ├── img/
 │   └── js/
-└── .github/workflows/pages.yml
+└── .github/workflows/static.yml
 ```
 
 ## Abrir no computador
@@ -43,9 +43,30 @@ python3 -m http.server 8080
 
 Depois acesse `http://localhost:8080`.
 
-## Cadastrar produtos
+## Catálogo de camisas de time
 
-Os dados atuais são demonstrativos e ficam em `assets/js/store-data.js`. Cada produto aceita:
+Os modelos e todas as fotos vêm do catálogo público `https://catalogopro.app/?tab=models`. Produtos arquivados saem da vitrine. O importador cruza o ID Shopify ou o nome exato normalizado com o catálogo público da MIC; diferenças de nome revisadas ficam em `scripts/catalog-mappings.json`. Não há correspondência aproximada entre modelos parecidos.
+
+**Regra vigente: preço normal de cada variação na MIC + R$75,00.** O acréscimo é fixo, inclusive para kits adultos e infantis (uma vez por kit). Não se usam preço comparativo, desconto de Pix, valores antigos de R$154,90/R$139,90 ou margem percentual. O cálculo é feito em centavos.
+
+Um tamanho só pode entrar na sacola se estiver disponível tanto no catálogo quanto na MIC e tiver preço confirmado. As fontes públicas não informam a quantidade de unidades: a loja não inventa esses números. Modelos sem correspondência/preço atual continuam visíveis, com compra bloqueada. Todas as camisas e kits têm frete grátis.
+
+O arquivo gerado é `assets/js/catalog-products.js`; não edite preços nele manualmente. Para atualizar e testar:
+
+```bash
+node --test tests/catalog.test.mjs
+node scripts/sync-catalog.mjs
+```
+
+Node 22 ou superior, sem dependências npm. O script precisa acessar `base44.app` e `miccamisasdetime.com.br`. O workflow `.github/workflows/static.yml` atualiza o catálogo antes de publicar em pushes para `main`, no comando manual **Run workflow** e aproximadamente a cada seis horas (GitHub Actions pode atrasar execuções agendadas). Os dados atualizados entram diretamente no artefato do Pages; o agendamento não cria commits.
+
+Se uma fonte falhar ou retornar uma estrutura inválida, o workflow falha antes da publicação e o último site publicado é preservado. O resumo da execução mostra contagens, preços ausentes e modelos que precisam de conferência. Fontes sem correspondência atual não reutilizam preço/estoque antigos.
+
+A vitrine tem busca por time/modelo, filtros combináveis de público, nacionais, internacionais, seleções, retrô, kits e disponibilidade, além de ordenação por preço. As fotos são exibidas sem recorte em molduras padronizadas; a galeria permite ver todas e ampliar a original.
+
+## Outras categorias
+
+As outras categorias ainda usam produtos demonstrativos em `assets/js/store-data.js`. Cada produto aceita:
 
 - nome, categoria e descrição;
 - valor e valor comparativo;
@@ -61,7 +82,7 @@ Para ativar uma venda, defina um preço numérico e altere `available` para `tru
 1. Crie um repositório no GitHub e envie esta pasta para a branch `main`.
 2. Abra **Settings → Pages** no repositório.
 3. Em **Build and deployment**, selecione **GitHub Actions**.
-4. O workflow em `.github/workflows/pages.yml` publicará o site automaticamente.
+4. O workflow em `.github/workflows/static.yml` publicará o site automaticamente.
 
 ## Checkout e segurança
 
@@ -74,7 +95,7 @@ O checkout está intencionalmente desligado. O GitHub Pages é estático e não 
 
 ## Próximas etapas recomendadas
 
-1. Inserir produtos reais, fotos, preços e tabelas de medidas.
+1. Confirmar modelos sem preço de origem e adicionar tabelas de medidas específicas.
 2. Definir WhatsApp, e-mail e horários oficiais de atendimento.
 3. Conectar banco de dados e login do painel.
 4. Integrar Stripe, frete e acompanhamento de pedidos.

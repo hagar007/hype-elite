@@ -8,8 +8,8 @@
     <title>Painel — Hype Elite</title>
     <link rel="icon" href="../assets/img/logo-he.png" type="image/png">
     <link rel="stylesheet" href="../assets/css/panel.css">
-    <script src="../assets/js/store-data.js" defer></script>
-    <script src="../assets/js/panel.js" defer></script>
+    <script src="../assets/js/catalog-products.js?v=20260926" defer></script><script src="../assets/js/store-data.js?v=20260926" defer></script>
+    <script src="../assets/js/panel.js?v=20260926" defer></script>
   </head>
   <body>
     <div class="panel-shell" data-panel-shell>
@@ -19,7 +19,7 @@
           <p class="panel-nav__label">Operação</p>
           <button type="button" data-panel-nav="overview"><span data-icon="dashboard"></span><span>Visão geral</span></button>
           <button type="button" data-panel-nav="orders"><span data-icon="orders"></span><span>Pedidos</span><span class="panel-nav__badge">0</span></button>
-          <button type="button" data-panel-nav="products"><span data-icon="products"></span><span>Produtos</span><span class="panel-nav__badge">7</span></button>
+          <button type="button" data-panel-nav="products"><span data-icon="products"></span><span>Produtos</span><span class="panel-nav__badge" data-panel-product-count>7</span></button>
           <button type="button" data-panel-nav="categories"><span data-icon="categories"></span><span>Categorias</span><span class="panel-nav__badge">8</span></button>
           <button type="button" data-panel-nav="inventory"><span data-icon="inventory"></span><span>Estoque</span></button>
           <p class="panel-nav__label">Negócio</p>
@@ -48,7 +48,7 @@
             <div class="metric-grid">
               <article class="metric-card"><div class="metric-card__top"><span>Faturamento</span><span class="metric-card__icon" data-icon="finance"></span></div><div><strong>R$ 0,00</strong><small>Nenhuma venda registrada</small></div></article>
               <article class="metric-card"><div class="metric-card__top"><span>Pedidos</span><span class="metric-card__icon" data-icon="orders"></span></div><div><strong>0</strong><small>0 aguardando ação</small></div></article>
-              <article class="metric-card"><div class="metric-card__top"><span>Produtos</span><span class="metric-card__icon" data-icon="products"></span></div><div><strong>7</strong><small>Todos em rascunho</small></div></article>
+              <article class="metric-card"><div class="metric-card__top"><span>Produtos</span><span class="metric-card__icon" data-icon="products"></span></div><div><strong data-panel-product-count>7</strong><small data-panel-catalog-note>Catálogo em atualização</small></div></article>
               <article class="metric-card"><div class="metric-card__top"><span>Categorias</span><span class="metric-card__icon" data-icon="categories"></span></div><div><strong>8</strong><small>4 atuais · 4 próximas fases</small></div></article>
             </div>
             <div class="panel-grid">

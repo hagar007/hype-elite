@@ -53,7 +53,7 @@
   }
 
   function formatPrice(value) {
-    if (typeof value !== "number") return "Preço a definir";
+    if (!Number.isFinite(value)) return "Indisponível no momento";
     return new Intl.NumberFormat(store.settings.locale, {
       style: "currency",
       currency: store.settings.currency,
@@ -81,7 +81,30 @@
     return `${path("produto.html")}?id=${encodeURIComponent(product.id)}`;
   }
 
+  function normalizeSearch(value) {
+    return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("pt-BR");
+  }
+
+  function getProductPrice(product, size) {
+    if (Array.isArray(product.variants) && size) {
+      const variant = product.variants.find(item => item.size === size);
+      return variant && Number.isFinite(variant.price) ? variant.price : null;
+    }
+    return Number.isFinite(product.price) ? product.price : null;
+  }
+
+  function isSizeAvailable(product, size) {
+    if (!product || !product.available || !product.sizes.includes(size)) return false;
+    if (Array.isArray(product.variants)) {
+      return product.variants.some(variant => variant.size === size && variant.available && Number.isFinite(variant.price));
+    }
+    return Number.isFinite(product.price);
+  }
+
   function productVisual(product, className) {
+    if (product.photos && product.photos.length) {
+      return `<div class="product-visual product-visual--photo ${className || ""}"><img src="${escapeHtml(product.photos[0])}" alt="${escapeHtml(product.name)}" width="600" height="750" loading="lazy" decoding="async"></div>`;
+    }
     const category = getCategory(product.category);
     const label = category ? category.name : "Hype Elite";
     return `
@@ -101,12 +124,13 @@
           ${productVisual(product)}
         </a>
         <div class="product-card__body">
-          <p class="product-card__category">${escapeHtml(category ? category.name : "Hype Elite")}</p>
+          <p class="product-card__category">${escapeHtml(product.team || (category ? category.name : "Hype Elite"))}${product.gender ? ` · ${escapeHtml(product.gender)}` : ""}</p>
           <h3 class="product-card__title"><a href="${productUrl(product)}">${escapeHtml(product.name)}</a></h3>
           <div class="product-card__footer">
-            <p class="product-card__price">${formatPrice(product.price)}</p>
+            <p class="product-card__price">${product.priceVaries ? "A partir de " : ""}${formatPrice(product.price)}</p>
             <a class="icon-link" href="${productUrl(product)}" aria-label="Abrir produto">${icon("arrow")}</a>
           </div>
+          ${product.freeShipping ? '<p class="product-card__shipping">Frete grátis</p>' : ""}
         </div>
       </article>`;
   }
@@ -114,7 +138,7 @@
   function getCart() {
     try {
       const parsed = JSON.parse(localStorage.getItem("hypeEliteCart") || "[]");
-      return Array.isArray(parsed) ? parsed : [];
+      return Array.isArray(parsed) ? parsed.filter(item => item && typeof item.productId === "string" && typeof item.size === "string" && Number.isInteger(item.quantity) && item.quantity > 0 && item.quantity <= 99) : [];
     } catch (error) {
       return [];
     }
@@ -128,16 +152,16 @@
 
   function addToCart(productId, size, quantity) {
     const product = getProduct(productId);
-    if (!product || !product.available || typeof product.price !== "number") {
-      toast("Este produto ainda está em preparação.");
+    if (!isSizeAvailable(product, size)) {
+      toast("Este tamanho está indisponível no momento.");
       return false;
     }
 
     const cart = getCart();
-    const safeQuantity = Math.max(1, Number(quantity) || 1);
+    const safeQuantity = Math.min(99, Math.max(1, Math.floor(Number(quantity)) || 1));
     const existing = cart.find((item) => item.productId === product.id && item.size === size);
 
-    if (existing) existing.quantity += safeQuantity;
+    if (existing) existing.quantity = Math.min(99, existing.quantity + safeQuantity);
     else cart.push({ productId: product.id, size: size || "Único", quantity: safeQuantity });
 
     saveCart(cart);
@@ -178,7 +202,7 @@
         <div class="shell announcement__inner">
           <span>Produtos selecionados sob encomenda</span>
           <span class="announcement__separator" aria-hidden="true"></span>
-          <span>Envios para todo o Brasil</span>
+          <span>Frete grátis em camisas e kits de futebol</span>
         </div>
       </div>
       <header class="site-header" data-sticky-header>
@@ -291,7 +315,7 @@
   function handleSearch(query) {
     const target = document.querySelector("[data-search-results]");
     if (!target) return;
-    const normalized = query.trim().toLocaleLowerCase("pt-BR");
+    const normalized = normalizeSearch(query.trim());
 
     if (!normalized) {
       target.innerHTML = '<p class="search-results__hint">Digite o nome ou a categoria de um produto.</p>';
@@ -300,18 +324,18 @@
 
     const matches = store.products.filter((product) => {
       const category = getCategory(product.category);
-      const haystack = `${product.name} ${product.shortDescription} ${category ? category.name : ""}`.toLocaleLowerCase("pt-BR");
+      const haystack = normalizeSearch(`${product.name} ${product.shortDescription} ${category ? category.name : ""}`);
       return product.published && haystack.includes(normalized);
-    }).slice(0, 6);
+    });
 
     target.innerHTML = matches.length
       ? `<p class="search-results__count">${matches.length} ${matches.length === 1 ? "resultado" : "resultados"}</p>
-         <div class="search-results__grid">${matches.map((product) => `
+         <div class="search-results__grid">${matches.slice(0, 6).map((product) => `
            <a class="search-result" href="${productUrl(product)}">
              ${productVisual(product, "product-visual--search")}
              <span><small>${escapeHtml(getCategory(product.category).name)}</small><strong>${escapeHtml(product.name)}</strong></span>
              ${icon("arrow")}
-           </a>`).join("")}</div>`
+           </a>`).join("")}</div><a class="text-link" href="${path("catalogo.html")}?q=${encodeURIComponent(query)}">Ver todos os resultados ${icon("arrow")}</a>`
       : '<p class="search-results__hint">Nenhum produto encontrado. Tente outro termo.</p>';
   }
 
@@ -341,6 +365,14 @@
       setDrawer(mobileDrawer, false);
       setDrawer(searchDrawer, false);
     });
+
+    document.addEventListener("error", (event) => {
+      const photo = event.target;
+      if (!(photo instanceof HTMLImageElement) || !photo.closest(".product-visual--photo")) return;
+      const frame = photo.parentElement;
+      if (!frame.querySelector(".photo-fallback")) frame.insertAdjacentHTML("beforeend", '<span class="photo-fallback">Foto indisponível no momento</span>');
+      photo.hidden = true;
+    }, true);
 
     document.querySelectorAll("[data-newsletter-form]").forEach((form) => form.addEventListener("submit", (event) => {
       event.preventDefault();
@@ -378,6 +410,9 @@
     escapeHtml,
     getCategory,
     getProduct,
+    getProductPrice,
+    isSizeAvailable,
+    normalizeSearch,
     getCart,
     saveCart,
     addToCart,

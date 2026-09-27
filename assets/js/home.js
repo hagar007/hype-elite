@@ -33,11 +33,11 @@
     trustTarget.innerHTML = `
       <div class="trust-item">
         <span class="trust-item__icon">${api.icon("lock")}</span>
-        <div><strong>Estrutura segura</strong><span>Checkout será conectado sem expor dados sensíveis.</span></div>
+        <div><strong>Sua seleção, seu estilo</strong><span>Clubes, seleções e clássicos do futebol.</span></div>
       </div>
       <div class="trust-item">
         <span class="trust-item__icon">${api.icon("truck")}</span>
-        <div><strong>Envio nacional</strong><span>Pedidos preparados para entrega em todo o Brasil.</span></div>
+        <div><strong>Frete grátis</strong><span>Em todas as camisas e kits de futebol.</span></div>
       </div>
       <div class="trust-item">
         <span class="trust-item__icon">${api.icon("headset")}</span>

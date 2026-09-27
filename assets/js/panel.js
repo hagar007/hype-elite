@@ -39,10 +39,14 @@
   document.querySelectorAll("[data-icon]").forEach((element) => { element.innerHTML = icon(element.dataset.icon); });
 
   const productsBody = document.querySelector("[data-panel-products]");
+  const escape = value => String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
+  document.querySelectorAll("[data-panel-product-count]").forEach(element => { element.textContent = String(store.products.length); });
+  const catalogNote = document.querySelector("[data-panel-catalog-note]");
+  if (catalogNote) catalogNote.textContent = `${store.products.filter(product => product.available).length} disponíveis para pedido`;
   if (productsBody) {
     productsBody.innerHTML = store.products.map((product) => {
       const category = store.categories.find((item) => item.id === product.category);
-      return `<tr><td class="data-table__name">${product.name}</td><td>${category ? category.name : "—"}</td><td>${product.sizes.length} variações</td><td><span class="status-chip">Rascunho</span></td></tr>`;
+      return `<tr><td class="data-table__name">${escape(product.name)}</td><td>${escape(category ? category.name : "—")}</td><td>${product.availableSizes ? product.availableSizes.length : 0} tamanhos disponíveis</td><td><span class="status-chip">${product.available ? "Disponível" : product.photos ? "Indisponível" : "Em preparação"}</span></td></tr>`;
     }).join("");
   }
 

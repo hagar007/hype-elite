@@ -221,4 +221,13 @@
       },
     ],
   };
+
+  if (Array.isArray(window.HYPE_ELITE_CATALOG_PRODUCTS)) {
+    window.HYPE_ELITE_STORE.products = [
+      ...window.HYPE_ELITE_CATALOG_PRODUCTS,
+      ...window.HYPE_ELITE_STORE.products.filter(product => product.category !== "camisas-de-time"),
+    ];
+    window.HYPE_ELITE_STORE.catalog = window.HYPE_ELITE_CATALOG_META;
+    window.HYPE_ELITE_STORE.settings.catalogStatus = "published";
+  }
 })();
