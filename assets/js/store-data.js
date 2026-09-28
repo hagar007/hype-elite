@@ -114,7 +114,7 @@
         sizes: ["P", "M", "G", "GG", "XG"],
         featured: true,
         available: false,
-        published: true,
+        published: false,
         color: "#e7e5e4",
       },
       {
@@ -131,7 +131,7 @@
         sizes: ["P", "M", "G", "GG", "XG"],
         featured: false,
         available: false,
-        published: true,
+        published: false,
         color: "#d6d3d1",
       },
       {
@@ -148,7 +148,7 @@
         sizes: ["34", "35", "36", "37", "38", "39", "40", "41", "42", "43"],
         featured: true,
         available: false,
-        published: true,
+        published: false,
         color: "#e5e7eb",
       },
       {
@@ -165,7 +165,7 @@
         sizes: ["34", "35", "36", "37", "38", "39", "40", "41", "42", "43"],
         featured: false,
         available: false,
-        published: true,
+        published: false,
         color: "#d1d5db",
       },
       {
@@ -182,7 +182,7 @@
         sizes: ["34–38", "39–43"],
         featured: true,
         available: false,
-        published: true,
+        published: false,
         color: "#f1f5f9",
       },
       {
@@ -199,7 +199,7 @@
         sizes: ["P", "M", "G", "GG"],
         featured: true,
         available: false,
-        published: true,
+        published: false,
         color: "#d4d4d4",
       },
       {
@@ -216,7 +216,7 @@
         sizes: ["Ajustável"],
         featured: false,
         available: false,
-        published: true,
+        published: false,
         color: "#e7e5e4",
       },
     ],
@@ -230,4 +230,14 @@
     window.HYPE_ELITE_STORE.catalog = window.HYPE_ELITE_CATALOG_META;
     window.HYPE_ELITE_STORE.settings.catalogStatus = "published";
   }
+  // Reviewed close-up photos from the existing supplier galleries.
+  const campaignPhotos = {"mic-6ab416efee0db68cf42877ad": {"photo": "https://base44.app/api/apps/69386f6ce9fe29121d66f65f/files/mp/public/69386f6ce9fe29121d66f65f/15c05be35_shopify_1790251197201.jpg", "preview": "assets/img/campaign/madrid-640.webp"}, "mic-6ab6a089105ec3e5f46bd823": {"photo": "https://base44.app/api/apps/69386f6ce9fe29121d66f65f/files/mp/public/69386f6ce9fe29121d66f65f/21ea8573f_shopify_1790353540092.jpg", "preview": "assets/img/campaign/retro-640.webp"}, "mic-6ab7d3066a4e45d17b42bc65": {"photo": "https://base44.app/api/apps/69386f6ce9fe29121d66f65f/files/mp/public/69386f6ce9fe29121d66f65f/cacdbeb74_shopify_1790432003161.jpg", "preview": "assets/img/campaign/nacionais-640.webp"}, "mic-6aaa7d06da710689ca68299d": {"photo": "https://base44.app/api/apps/69386f6ce9fe29121d66f65f/files/mp/public/69386f6ce9fe29121d66f65f/edd896a8a_shopify_1790252389102.jpg", "preview": "assets/img/campaign/selecoes-640.webp"}};
+  window.HYPE_ELITE_STORE.campaignProductIds = Object.keys(campaignPhotos);
+  window.HYPE_ELITE_STORE.products.forEach(product => {
+    const selected = campaignPhotos[product.id];
+    if (selected && product.photos?.includes(selected.photo)) {
+      product.photos = [selected.photo, ...product.photos.filter(photo => photo !== selected.photo)];
+      product.photoPreview = selected.preview;
+    }
+  });
 })();

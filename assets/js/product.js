@@ -4,13 +4,14 @@
   const params = new URLSearchParams(window.location.search);
   const product = api.getProduct(params.get("id") || api.store.products[0]?.id);
   const target = document.querySelector("[data-product-detail]");
-  if (!target || !product) {
+  if (!target || !product || !product.published) {
     if (target) target.innerHTML = `<div class="catalog-empty"><div><h2>Produto não encontrado</h2><p>Este modelo pode ter saído do catálogo.</p><a class="button" href="${api.path("categorias/camisas-de-time/")}">Explorar camisas</a></div></div>`;
     return;
   }
   const category = api.getCategory(product.category);
   let selectedSize = product.sizes.find(size => api.isSizeAvailable(product, size)) || "";
   const photos = product.photos || [];
+  let activePhoto = 0;
   document.title = `${product.name} — Hype Elite`;
   const e = api.escapeHtml;
   const status = !product.available ? "Indisponível no momento" : "Disponível para pedido";
@@ -19,7 +20,7 @@
       <a class="product-visual product-visual--photo product-gallery__main" data-gallery-link href="${e(photos[0])}" target="_blank" rel="noopener" aria-label="Abrir foto ampliada">
         <img data-gallery-main src="${e(photos[0])}" alt="${e(product.name)} — foto 1" width="800" height="1000" fetchpriority="high">
       </a>
-      <div class="product-gallery__caption"><span>Clique na foto para ampliar</span><span data-gallery-count>1 / ${photos.length}</span></div>
+      <div class="product-gallery__caption"><span>Toque na foto para ampliar</span><span data-gallery-count>1 / ${photos.length}</span></div>
       <div class="product-gallery__thumbs" role="group" aria-label="Escolha uma foto">${photos.map((photo, index) => `<button type="button" class="gallery-thumb" data-photo-index="${index}" aria-label="Ver foto ${index + 1}" aria-pressed="${index === 0}"><img src="${e(photo)}" alt="" width="80" height="100" loading="lazy" decoding="async"></button>`).join("")}</div>
     </div>` : `<div class="product-gallery">${api.productVisual(product)}</div>`;
   target.innerHTML = `
@@ -30,7 +31,6 @@
         <h1>${e(product.name)}</h1>
         <p class="product-info__price" data-product-price>${api.formatPrice(api.getProductPrice(product, selectedSize))}</p>
         ${product.freeShipping ? `<p class="product-free-shipping">${api.icon("truck")} Frete grátis para todo o Brasil</p>` : ""}
-        <p class="product-info__description">${e(product.description)}</p>
         <div class="product-options"><div class="product-options__label"><span>Escolha o tamanho</span><span data-size-value>${e(selectedSize || "Indisponível")}</span></div>
           <div class="size-grid" role="group" aria-label="Tamanhos disponíveis">${product.sizes.map(size => {
             const available = api.isSizeAvailable(product, size);
@@ -42,7 +42,7 @@
         <p class="product-status ${product.available ? "is-available" : ""}">${status}</p>
         <button class="button button--wide" type="button" data-add-product ${selectedSize ? "" : "disabled"}>${selectedSize ? "Adicionar à sacola" : "Produto indisponível"} ${api.icon("bag")}</button>
         <div class="product-accordions">
-          <details open><summary>Detalhes do modelo</summary><p>${e(product.shortDescription)}</p><p>Veja todas as fotos na galeria. Os tamanhos habilitados estão disponíveis para pedido.</p></details>
+          <details><summary>Detalhes do modelo</summary><p>${e(product.description)}</p><p>${e(product.shortDescription)}</p></details>
           <details><summary>Prazo e envio</summary><p>${product.freeShipping ? "Frete grátis para todo o Brasil. " : ""}Produto sob encomenda. O prazo de entrega precisa ser confirmado antes da conclusão do pedido.</p></details>
           <details><summary>Tamanhos e medidas</summary><p>Escolha entre os tamanhos disponíveis acima. As medidas podem variar entre modelos; consulte o atendimento para confirmar o caimento antes de comprar.</p><a class="text-link" href="${api.path("atendimento.html")}">Atendimento</a></details>
         </div>
@@ -62,8 +62,39 @@
   }
   target.querySelectorAll("[data-size]").forEach(button => button.addEventListener("click", () => { selectedSize = button.dataset.size; updateSize(); }));
   target.querySelector("[data-add-product]").addEventListener("click", () => api.addToCart(product.id, selectedSize, 1));
-  target.querySelectorAll("[data-photo-index]").forEach(button => button.addEventListener("click", () => {
-    const index = Number(button.dataset.photoIndex);
+  let photoDialog;
+  if (photos.length) {
+    target.insertAdjacentHTML("beforeend", `<dialog class="photo-dialog" aria-label="Fotos de ${e(product.name)}">
+      <div class="photo-dialog__bar"><p>Detalhes do produto</p><button class="header-action" type="button" data-photo-close aria-label="Fechar foto">${api.icon("close")}</button></div>
+      <img data-zoom-photo alt="">
+      <div class="photo-dialog__controls"><button type="button" data-photo-prev aria-label="Foto anterior">←</button><span data-zoom-count aria-live="polite"></span><button type="button" data-photo-next aria-label="Próxima foto">→</button></div>
+    </dialog>`);
+    photoDialog = target.querySelector(".photo-dialog");
+    const updateZoom = () => {
+      const photo = photoDialog.querySelector("[data-zoom-photo]");
+      photo.src = photos[activePhoto];
+      photo.alt = `${product.name} — foto ${activePhoto + 1}`;
+      photoDialog.querySelector("[data-zoom-count]").textContent = `${activePhoto + 1} / ${photos.length}`;
+    };
+    target.querySelector("[data-gallery-link]").addEventListener("click", event => {
+      if (typeof photoDialog.showModal !== "function") return;
+      event.preventDefault();
+      updateZoom();
+      photoDialog.showModal();
+      document.body.classList.add("has-drawer");
+    });
+    photoDialog.querySelector("[data-photo-close]").addEventListener("click", () => photoDialog.close());
+    photoDialog.addEventListener("close", () => document.body.classList.remove("has-drawer"));
+    photoDialog.addEventListener("click", event => { if (event.target === photoDialog) photoDialog.close(); });
+    const move = delta => { selectPhoto((activePhoto + delta + photos.length) % photos.length); updateZoom(); };
+    photoDialog.querySelector("[data-photo-prev]").addEventListener("click", () => move(-1));
+    photoDialog.querySelector("[data-photo-next]").addEventListener("click", () => move(1));
+    photoDialog.addEventListener("keydown", event => {
+      if (event.key === "ArrowRight" || event.key === "ArrowLeft") { event.preventDefault(); move(event.key === "ArrowRight" ? 1 : -1); }
+    });
+  }
+  function selectPhoto(index) {
+    activePhoto = index;
     const img = target.querySelector("[data-gallery-main]");
     img.src = photos[index];
     img.alt = `${product.name} — foto ${index + 1}`;
@@ -71,8 +102,9 @@
     target.querySelector(".photo-fallback")?.remove();
     target.querySelector("[data-gallery-link]").href = photos[index];
     target.querySelector("[data-gallery-count]").textContent = `${index + 1} / ${photos.length}`;
-    target.querySelectorAll("[data-photo-index]").forEach(thumb => thumb.setAttribute("aria-pressed", String(thumb === button)));
-  }));
+    target.querySelectorAll("[data-photo-index]").forEach(thumb => thumb.setAttribute("aria-pressed", String(Number(thumb.dataset.photoIndex) === index)));
+  }
+  target.querySelectorAll("[data-photo-index]").forEach(button => button.addEventListener("click", () => selectPhoto(Number(button.dataset.photoIndex))));
   const relatedTarget = document.querySelector("[data-related-products]");
   if (relatedTarget) {
     const related = api.store.products.filter(item => item.published && item.category === product.category && item.id !== product.id)

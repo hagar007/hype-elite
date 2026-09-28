@@ -1,4 +1,4 @@
-# Hype Elite — estrutura inicial da loja
+# Hype Elite — loja e catálogo
 
 Base estática, responsiva e pronta para GitHub Pages. O projeto foi organizado para começar com camisas de time, tênis, meias e roupas de academia, mantendo páginas próprias para bonés, papetes e slides, sapatos, acessórios e novas expansões.
 
@@ -12,6 +12,15 @@ Base estática, responsiva e pronta para GitHub Pages. O projeto foi organizado 
 - Painel visual em `/painel/` com menu para pedidos, produtos, categorias, estoque, financeiro, clientes e configurações.
 - Workflow pronto para publicação automática no GitHub Pages.
 - Layout responsivo para computador, tablet e celular.
+
+## Vitrine para celular
+
+- Início compacto com banner principal, atalhos, quatro produtos em destaque e capas de coleções.
+- Fotos dos banners selecionadas nas galerias existentes do fornecedor; fontes registradas em `assets/img/campaign/SOURCES.json`. Apenas redução de resolução e compressão WebP foram aplicadas. Nenhuma imagem gerada por IA foi incluída nessa reforma.
+- Cantos arredondados nas fotos, nas capas, nas miniaturas e na ampliação em um diálogo na própria página.
+- Filtros avançados recolhidos, com pesquisa e público sempre acessíveis. Produtos demonstrativos ficam fora da vitrine.
+- `assets/css/mobile.css` concentra os ajustes da experiência para celular. Imagens de campanha e logo leves são servidos pelo próprio site.
+- `campaignProductIds` e a seleção de fotos em `store-data.js` controlam os destaques. Preço e disponibilidade continuam vindo da atualização de catálogo; produto indisponível sai dos destaques.
 
 ## Tipografia
 
@@ -70,7 +79,7 @@ A vitrine tem busca por time/modelo, filtros combináveis de público, nacionais
 
 ## Outras categorias
 
-As outras categorias ainda usam produtos demonstrativos em `assets/js/store-data.js`. Cada produto aceita:
+As outras categorias mantêm rascunhos em `assets/js/store-data.js`, com `published: false`. Eles não aparecem na loja, na busca nem no catálogo; as categorias vazias mostram uma mensagem curta de novidades em breve. Cada produto aceita:
 
 - nome, categoria e descrição;
 - valor e valor comparativo;
@@ -79,7 +88,7 @@ As outras categorias ainda usam produtos demonstrativos em `assets/js/store-data
 - disponibilidade e publicação;
 - cor do espaço visual.
 
-Para ativar uma venda, defina um preço numérico e altere `available` para `true`. Fotos reais serão adicionadas na próxima etapa.
+Para publicar um produto real, cadastre fotos e preço, confirme tamanhos/disponibilidade e defina `published: true`. O checkout continua dependente da integração segura descrita abaixo.
 
 ## Publicar no GitHub Pages
 

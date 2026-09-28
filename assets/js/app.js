@@ -103,7 +103,7 @@
 
   function productVisual(product, className) {
     if (product.photos && product.photos.length) {
-      return `<div class="product-visual product-visual--photo ${className || ""}"><img src="${escapeHtml(product.photos[0])}" alt="${escapeHtml(product.name)}" width="600" height="750" loading="lazy" decoding="async"></div>`;
+      return `<div class="product-visual product-visual--photo ${className || ""}"><img src="${escapeHtml(product.photoPreview ? path(product.photoPreview) : product.photos[0])}" alt="${escapeHtml(product.name)}" width="600" height="750" loading="lazy" decoding="async"></div>`;
     }
     const category = getCategory(product.category);
     const label = category ? category.name : "Hype Elite";
@@ -200,9 +200,7 @@
       <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
       <div class="announcement">
         <div class="shell announcement__inner">
-          <span>Produtos selecionados sob encomenda</span>
-          <span class="announcement__separator" aria-hidden="true"></span>
-          <span>Frete grátis em camisas e kits de futebol</span>
+          <span>Frete grátis em camisas e kits</span>
         </div>
       </div>
       <header class="site-header" data-sticky-header>
@@ -211,7 +209,7 @@
             ${icon("menu")}
           </button>
           <a class="brand" href="${path("index.html")}" aria-label="Hype Elite — início">
-            <img src="${path("assets/img/logo-he.png")}" alt="" width="48" height="48">
+            <img src="${path("assets/img/logo-he.webp")}" alt="" width="48" height="48">
             <span class="brand__wordmark">Hype Elite</span>
           </a>
           <nav class="desktop-nav" aria-label="Navegação principal">
@@ -272,43 +270,19 @@
     if (!target) return;
 
     target.innerHTML = `
-      <footer class="site-footer">
-        <div class="shell footer-grid">
-          <div class="footer-brand">
-            <a class="brand brand--footer" href="${path("index.html")}">
-              <img src="${path("assets/img/logo-he.png")}" alt="" width="52" height="52">
-              <span class="brand__wordmark">Hype Elite</span>
-            </a>
-            <p>${escapeHtml(store.brand.tagline)} Uma marca brasileira em construção, com curadoria e atendimento próximo.</p>
-          </div>
-          <div class="footer-column">
-            <h2>Comprar</h2>
-            <a href="${path("catalogo.html")}">Catálogo</a>
-            <a href="${path("categorias/camisas-de-time/")}">Camisas de time</a>
-            <a href="${path("categorias/tenis/")}">Tênis</a>
-            <a href="${path("categorias/academia/")}">Academia</a>
-          </div>
-          <div class="footer-column">
-            <h2>Informações</h2>
-            <a href="${path("sobre.html")}">Sobre a marca</a>
+      <footer class="site-footer footer-clean">
+        <div class="shell footer-clean__top">
+          <a class="brand brand--footer" href="${path("index.html")}">
+            <img src="${path("assets/img/logo-he.webp")}" alt="" width="40" height="40">
+            <span class="brand__wordmark">Hype Elite</span>
+          </a>
+          <nav aria-label="Informações da loja">
             <a href="${path("atendimento.html")}">Atendimento</a>
-            <a href="${path("politicas.html#envio")}">Envio e prazos</a>
-            <a href="${path("politicas.html#trocas")}">Trocas e devoluções</a>
-          </div>
-          <div class="footer-column footer-column--wide">
-            <h2>Novidades da Hype</h2>
-            <p>Deixe seu e-mail para receber lançamentos quando o catálogo entrar no ar.</p>
-            <form class="newsletter" data-newsletter-form>
-              <label class="sr-only" for="newsletter-email">Seu melhor e-mail</label>
-              <input id="newsletter-email" type="email" required placeholder="Seu melhor e-mail">
-              <button type="submit" aria-label="Cadastrar e-mail">${icon("arrow")}</button>
-            </form>
-          </div>
+            <a href="${path("politicas.html")}">Envios e trocas</a>
+            <a href="${path("sobre.html")}">A marca</a>
+          </nav>
         </div>
-        <div class="shell footer-bottom">
-          <p>© ${new Date().getFullYear()} Hype Elite. Todos os direitos reservados.</p>
-          <p>Loja em estruturação.</p>
-        </div>
+        <div class="shell footer-clean__bottom"><p>© ${new Date().getFullYear()} Hype Elite</p><p>Produtos sob encomenda.</p></div>
       </footer>`;
   }
 
@@ -373,12 +347,6 @@
       if (!frame.querySelector(".photo-fallback")) frame.insertAdjacentHTML("beforeend", '<span class="photo-fallback">Foto indisponível no momento</span>');
       photo.hidden = true;
     }, true);
-
-    document.querySelectorAll("[data-newsletter-form]").forEach((form) => form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      form.reset();
-      toast("Cadastro preparado. A integração de e-mail será ativada na próxima etapa.");
-    }));
 
     let previousY = window.scrollY;
     const header = document.querySelector("[data-sticky-header]");

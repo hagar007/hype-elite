@@ -25,11 +25,11 @@
   const meta = activeCategory === "all"
     ? { name: "Todo o catálogo", description: "Encontre seu próximo favorito. Explore clubes, seleções e peças para vestir o futebol no seu dia a dia." }
     : api.getCategory(activeCategory) || { name: "Catálogo", description: "Explore a seleção Hype Elite." };
-  document.querySelector("[data-catalog-title]").textContent = meta.name;
-  document.querySelector("[data-catalog-description]").textContent = activeCategory === "camisas-de-time"
-    ? "A paixão pelo jogo, em todos os estilos. Modelos masculinos, femininos e infantis, dos novos uniformes aos clássicos retrô. Frete grátis para todo o Brasil."
-    : meta.description;
-  document.querySelector("[data-catalog-breadcrumb]").innerHTML = `<a href="${api.path("index.html")}">Início</a><span aria-hidden="true">/</span><span>${api.escapeHtml(meta.name)}</span>`;
+  const cover = document.querySelector(".page-hero");
+  if (cover) cover.innerHTML = `<div class="shell catalog-cover__inner">
+    <div><nav class="breadcrumb" aria-label="Navegação estrutural"><a href="${api.path("index.html")}">Início</a><span aria-hidden="true">/</span><span>Catálogo</span></nav><h1>${api.escapeHtml(meta.name)}</h1></div>
+    ${hasFootball ? `<img src="${api.path("assets/img/campaign/madrid-640.webp")}" alt="Detalhe de uma camisa do catálogo" width="124" height="140" decoding="async" data-catalog-cover>` : ""}
+  </div>`;
   document.title = `${meta.name} — Hype Elite`;
   const categoryTarget = document.querySelector("[data-category-filters]");
   if (categoryTarget) categoryTarget.innerHTML = [
@@ -40,13 +40,19 @@
   const controls = document.createElement("div");
   controls.className = "catalog-controls";
   controls.innerHTML = `
-    ${hasFootball ? `<div class="catalog-segments" role="group" aria-label="Público">${groups.map(([value, label]) => `<button type="button" data-audience="${value}" aria-pressed="${audience === value}">${label}</button>`).join("")}</div>
-    <div class="catalog-collections" role="group" aria-label="Coleções">${collections.map(([value, label]) => `<button type="button" data-collection="${value}" aria-pressed="${collection === value}">${label}</button>`).join("")}</div>` : ""}
-    <div class="catalog-refinements">
-      <label class="catalog-search">${api.icon("search")}<span class="sr-only">Buscar por time ou modelo</span><input type="search" data-catalog-search placeholder="Busque seu time ou modelo" value="${api.escapeHtml(query)}"></label>
-      ${hasFootball ? `<label class="catalog-type"><span class="sr-only">Tipo de modelo</span><select data-model-type>${types.map(([value, label]) => `<option value="${value}" ${type === value ? "selected" : ""}>${label}</option>`).join("")}</select></label>` : ""}
+    <div class="catalog-search-row">
+      <label class="catalog-search">${api.icon("search")}<span class="sr-only">Buscar por time ou modelo</span><input type="search" data-catalog-search placeholder="Seu time ou modelo" value="${api.escapeHtml(query)}"></label>
+      <button class="catalog-filter-toggle" type="button" data-advanced-toggle aria-expanded="false" aria-controls="catalog-filter-panel">Filtros <span class="catalog-filter-count" data-filter-count></span></button>
     </div>
-    <div class="catalog-availability"><label><input type="checkbox" data-in-stock ${onlyAvailable ? "checked" : ""}> Somente disponíveis</label><button class="catalog-reset" type="button" data-reset-filters>Limpar filtros</button></div>`;
+    <div class="catalog-filter-panel" id="catalog-filter-panel" hidden>
+      ${hasFootball ? `<div class="catalog-collections" role="group" aria-label="Coleções">${collections.map(([value, label]) => `<button type="button" data-collection="${value}" aria-pressed="${collection === value}">${label}</button>`).join("")}</div>` : ""}
+      <div class="catalog-refinements">
+        <label class="catalog-type catalog-category-select"><span>Categoria</span><select data-mobile-category><option value="all">Todo o catálogo</option>${store.categories.map(category => `<option value="${api.escapeHtml(category.id)}" ${category.id === activeCategory ? "selected" : ""}>${api.escapeHtml(category.name)}</option>`).join("")}</select></label>
+        ${hasFootball ? `<label class="catalog-type"><span>Modelo</span><select data-model-type>${types.map(([value, label]) => `<option value="${value}" ${type === value ? "selected" : ""}>${label}</option>`).join("")}</select></label>` : ""}
+      </div>
+      <div class="catalog-availability"><label><input type="checkbox" data-in-stock ${onlyAvailable ? "checked" : ""}> Somente disponíveis</label><button class="catalog-reset" type="button" data-reset-filters>Limpar filtros</button></div>
+    </div>
+    ${hasFootball ? `<div class="catalog-segments" role="group" aria-label="Público">${groups.map(([value, label]) => `<button type="button" data-audience="${value}" aria-pressed="${audience === value}">${label}</button>`).join("")}</div>` : ""}`;
   main.prepend(controls);
   target.insertAdjacentHTML("afterend", '<div class="catalog-pagination"><p data-page-progress></p><button class="button button--outline" type="button" data-load-more>Ver mais produtos</button></div>');
   const more = main.querySelector("[data-load-more]");
@@ -79,10 +85,19 @@
 
   function render() {
     const products = filteredProducts();
+    const refinements = [collection, type, onlyAvailable].filter(Boolean).length;
+    controls.querySelector("[data-filter-count]").textContent = refinements ? `(${refinements})` : "";
+    const coverPhoto = document.querySelector("[data-catalog-cover]");
+    if (coverPhoto) {
+      const image = { nacionais: "nacionais", internacionais: "madrid", selecoes: "selecoes", retro: "retro" }[collection] || "madrid";
+      coverPhoto.src = api.path(`assets/img/campaign/${image}-640.webp`);
+    }
     count.textContent = `${products.length} ${products.length === 1 ? "produto" : "produtos"}`;
     count.setAttribute("aria-live", "polite");
     target.innerHTML = products.length ? products.slice(0, limit).map(api.productCard).join("")
-      : '<div class="catalog-empty"><div><h2>Nenhum modelo por aqui.</h2><p>Tente outro time ou ajuste os filtros para explorar mais opções.</p><button class="text-link" type="button" data-empty-reset>Limpar filtros</button></div></div>';
+      : !baseProducts.length
+        ? `<div class="catalog-empty"><div><h2>Novidades em breve.</h2><p>Enquanto isso, encontre seu próximo manto.</p><a class="button" href="${api.path("categorias/camisas-de-time/")}">Explorar camisas</a></div></div>`
+        : '<div class="catalog-empty"><div><h2>Nenhum modelo encontrado.</h2><p>Tente outro time ou ajuste os filtros.</p><button class="text-link" type="button" data-empty-reset>Limpar filtros</button></div></div>';
     progress.textContent = products.length ? `Exibindo ${Math.min(limit, products.length)} de ${products.length} produtos` : "";
     more.hidden = products.length <= limit;
     controls.querySelectorAll("[data-audience]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.audience === audience)));
@@ -104,12 +119,23 @@
   function reset() {
     audience = collection = type = query = "";
     onlyAvailable = false;
+    sortMode = "featured";
+    if (sort) sort.value = sortMode;
     controls.querySelector("[data-catalog-search]").value = "";
     controls.querySelector("[data-in-stock]").checked = false;
     if (hasFootball) controls.querySelector("[data-model-type]").value = "";
     update();
   }
 
+  const filterPanel = controls.querySelector("#catalog-filter-panel");
+  controls.querySelector("[data-advanced-toggle]").addEventListener("click", event => {
+    filterPanel.hidden = !filterPanel.hidden;
+    event.currentTarget.setAttribute("aria-expanded", String(!filterPanel.hidden));
+  });
+  controls.querySelector("[data-mobile-category]").addEventListener("change", event => {
+    const category = api.getCategory(event.target.value);
+    window.location.href = category ? api.categoryPath(category) : api.path("catalogo.html");
+  });
   controls.querySelectorAll("[data-audience]").forEach(button => button.addEventListener("click", () => { audience = button.dataset.audience; update(); }));
   controls.querySelectorAll("[data-collection]").forEach(button => button.addEventListener("click", () => { collection = button.dataset.collection; update(); }));
   controls.querySelector("[data-catalog-search]").addEventListener("input", event => { query = event.target.value; update(); });

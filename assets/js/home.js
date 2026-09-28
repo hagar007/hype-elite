@@ -1,47 +1,14 @@
 (function () {
   "use strict";
-
   const api = window.HypeElite;
-  const store = api.store;
-
-  const categoryTarget = document.querySelector("[data-category-grid]");
-  if (categoryTarget) {
-    categoryTarget.innerHTML = store.categories.map((category, index) => `
-      <a class="category-card category-card--${api.escapeHtml(category.tone)}" href="${api.categoryPath(category)}">
-        <div class="category-card__top">
-          <span class="category-card__index">0${index + 1}</span>
-          <span class="category-card__status">${category.status === "planned" ? "Próxima fase" : "Explorar"}</span>
-        </div>
-        ${api.categoryIcon(category.icon)}
-        <div class="category-card__bottom">
-          <p>${api.escapeHtml(category.eyebrow)}</p>
-          <h3>${api.escapeHtml(category.name)}</h3>
-          <span>${api.escapeHtml(category.description)}</span>
-        </div>
-        <span class="category-card__arrow">${api.icon("arrow")}</span>
-      </a>`).join("");
-  }
-
-  const productsTarget = document.querySelector("[data-featured-products]");
-  if (productsTarget) {
-    const featured = store.products.filter((product) => product.published && product.featured).slice(0, 4);
-    productsTarget.innerHTML = featured.map(api.productCard).join("");
-  }
-
-  const trustTarget = document.querySelector("[data-trust-strip]");
-  if (trustTarget) {
-    trustTarget.innerHTML = `
-      <div class="trust-item">
-        <span class="trust-item__icon">${api.icon("lock")}</span>
-        <div><strong>Sua seleção, seu estilo</strong><span>Clubes, seleções e clássicos do futebol.</span></div>
-      </div>
-      <div class="trust-item">
-        <span class="trust-item__icon">${api.icon("truck")}</span>
-        <div><strong>Frete grátis</strong><span>Em todas as camisas e kits de futebol.</span></div>
-      </div>
-      <div class="trust-item">
-        <span class="trust-item__icon">${api.icon("headset")}</span>
-        <div><strong>Atendimento próximo</strong><span>Clareza antes, durante e depois de cada pedido.</span></div>
-      </div>`;
-  }
+  const products = api.store.products.filter(product => product.published && product.available);
+  const selected = (api.store.campaignProductIds || []).map(id => products.find(product => product.id === id)).filter(Boolean);
+  const featured = [...selected, ...products.filter(product => !selected.includes(product))].slice(0, 4);
+  const target = document.querySelector("[data-featured-products]");
+  if (target) target.innerHTML = featured.map(api.productCard).join("");
+  const categories = document.querySelector("[data-more-categories]");
+  if (categories) categories.innerHTML = api.store.categories.filter(category => category.id !== "camisas-de-time").map(category => {
+    const hasProducts = api.store.products.some(product => product.published && product.category === category.id);
+    return `<a href="${api.categoryPath(category)}"><span>${api.escapeHtml(category.name)}</span>${hasProducts ? api.icon("arrow") : "<small>Em breve</small>"}</a>`;
+  }).join("");
 })();

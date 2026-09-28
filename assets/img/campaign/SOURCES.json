@@ -1,0 +1,30 @@
+[
+  {
+    "file": "assets/img/campaign/madrid-640.webp",
+    "productId": "mic-6ab416efee0db68cf42877ad",
+    "product": "Camisa Real Madrid Goleiro 25/26",
+    "source": "https://base44.app/api/apps/69386f6ce9fe29121d66f65f/files/mp/public/69386f6ce9fe29121d66f65f/15c05be35_shopify_1790251197201.jpg",
+    "operation": "Resize and WebP compression only; no generative edits."
+  },
+  {
+    "file": "assets/img/campaign/retro-640.webp",
+    "productId": "mic-6ab6a089105ec3e5f46bd823",
+    "product": "Camisa Retrô PSG I Ronaldinho 2001/02",
+    "source": "https://base44.app/api/apps/69386f6ce9fe29121d66f65f/files/mp/public/69386f6ce9fe29121d66f65f/21ea8573f_shopify_1790353540092.jpg",
+    "operation": "Resize and WebP compression only; no generative edits."
+  },
+  {
+    "file": "assets/img/campaign/nacionais-640.webp",
+    "productId": "mic-6ab7d3066a4e45d17b42bc65",
+    "product": "Camisa Flamengo Amarela 2026/27",
+    "source": "https://base44.app/api/apps/69386f6ce9fe29121d66f65f/files/mp/public/69386f6ce9fe29121d66f65f/cacdbeb74_shopify_1790432003161.jpg",
+    "operation": "Resize and WebP compression only; no generative edits."
+  },
+  {
+    "file": "assets/img/campaign/selecoes-640.webp",
+    "productId": "mic-6aaa7d06da710689ca68299d",
+    "product": "Camisa Feminina Brasil III 2019/20",
+    "source": "https://base44.app/api/apps/69386f6ce9fe29121d66f65f/files/mp/public/69386f6ce9fe29121d66f65f/edd896a8a_shopify_1790252389102.jpg",
+    "operation": "Resize and WebP compression only; no generative edits."
+  }
+]
