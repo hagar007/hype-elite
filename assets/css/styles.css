@@ -2499,3 +2499,13 @@ body[data-page="catalog"] .page-hero h1 { font-size: clamp(3.5rem, 6vw, 6rem); l
   .catalog-collections button { font-size: .65rem; padding-inline: 10px; }
   .gallery-thumb { flex-basis: 58px; width: 58px; height: 73px; }
 }
+.football-shortcuts { padding: 36px 0 64px; }
+.football-shortcuts__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 28px; }
+.football-shortcuts__grid a { display: flex; align-items: center; justify-content: space-between; min-height: 92px; padding: 20px 24px; border: 1px solid var(--line); color: var(--ink); background: #fff; text-decoration: none; font-weight: 700; transition: background .2s, color .2s; }
+.football-shortcuts__grid a:hover, .football-shortcuts__grid a:focus-visible { background: var(--ink); color: #fff; }
+.football-shortcuts__grid span { font-size: 1.2rem; }
+@media (max-width: 700px) {
+  .football-shortcuts { padding: 24px 0 48px; }
+  .football-shortcuts__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .football-shortcuts__grid a { min-height: 72px; padding: 16px; font-size: .85rem; }
+}
