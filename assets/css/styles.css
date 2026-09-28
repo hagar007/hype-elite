@@ -1,4 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Manrope:wght@400..800&display=swap");
+/* OFL fallback for devices without the licensed display face. */
+@font-face {
+  font-family: 'Anton';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/anton-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 :root {
   --ink: #0a0a0a;
@@ -11,8 +19,8 @@
   --line: #deded9;
   --success: #194c36;
   --warning: #7c5d25;
-  --display: "Bodoni Moda", "Iowan Old Style", Didot, "Bodoni MT", Georgia, serif;
-  --sans: "Manrope", "Avenir Next", Avenir, Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --display: "NikeFuturaND-CnXBold", "Futura Condensed Extra Bold", "Anton", Impact, "Arial Narrow", sans-serif;
+  --sans: "Helvetica Now Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --shell: min(100% - 40px, 1320px);
   --radius: 2px;
   --shadow: 0 20px 60px rgba(10, 10, 10, 0.08);
@@ -37,8 +45,8 @@ body {
   color: var(--ink);
   font-family: var(--sans);
   font-size: 16px;
-  font-weight: 450;
-  letter-spacing: -0.012em;
+  font-weight: 400;
+  letter-spacing: 0;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -172,10 +180,12 @@ textarea:focus-visible {
   max-width: 760px;
   margin-bottom: 0;
   font-family: var(--display);
-  font-size: clamp(2.4rem, 5vw, 5.2rem);
-  font-weight: 500;
-  letter-spacing: -0.04em;
-  line-height: 0.96;
+  font-size: clamp(2.2rem, 4.2vw, 4.2rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.08;
+  font-style: normal;
+  text-transform: uppercase;
 }
 
 .section-heading p:not(.eyebrow) {
@@ -338,10 +348,10 @@ textarea:focus-visible {
 }
 
 .brand__wordmark {
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 1.22rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
@@ -505,7 +515,7 @@ textarea:focus-visible {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--line);
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 1.42rem;
   font-weight: 500;
   letter-spacing: -0.015em;
@@ -573,7 +583,7 @@ textarea:focus-visible {
   padding: 14px 0 16px;
   border: 0;
   background: transparent;
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: clamp(1.8rem, 4vw, 4.6rem);
   letter-spacing: -0.04em;
   outline: 0;
@@ -634,9 +644,9 @@ textarea:focus-visible {
 }
 
 .search-result strong {
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 1.08rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .search-result > svg {
@@ -666,17 +676,19 @@ textarea:focus-visible {
 .hero h1 {
   margin-bottom: 26px;
   font-family: var(--display);
-  font-size: clamp(4.3rem, 8vw, 9rem);
-  font-weight: 500;
-  letter-spacing: -0.052em;
-  line-height: 0.84;
+  font-size: clamp(3.5rem, 6.3vw, 6.8rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.08;
+  font-style: normal;
+  text-transform: uppercase;
 }
 
 .hero h1 span {
   display: block;
-  margin-left: 0.48em;
-  font-style: italic;
-  font-weight: 400;
+  margin-left: 0;
+  font-style: normal;
+  font-weight: inherit;
 }
 
 .hero__description {
@@ -762,7 +774,7 @@ textarea:focus-visible {
 }
 
 .hero__number {
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 3rem;
   font-weight: 500;
   letter-spacing: -0.035em;
@@ -801,7 +813,7 @@ textarea:focus-visible {
   display: inline-flex;
   align-items: center;
   gap: 30px;
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 0.96rem;
   font-weight: 500;
   letter-spacing: 0.08em;
@@ -930,10 +942,12 @@ textarea:focus-visible {
 .category-card__bottom h3 {
   margin-bottom: 15px;
   font-family: var(--display);
-  font-size: clamp(2.3rem, 4vw, 4.8rem);
-  font-weight: 500;
-  letter-spacing: -0.038em;
-  line-height: 0.96;
+  font-size: clamp(2.1rem, 3.5vw, 4rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.08;
+  font-style: normal;
+  text-transform: uppercase;
 }
 
 .category-card__bottom span {
@@ -1127,7 +1141,7 @@ textarea:focus-visible {
 
 .product-card__title {
   margin-bottom: 15px;
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 1.32rem;
   font-weight: 500;
   letter-spacing: -0.015em;
@@ -1242,10 +1256,12 @@ textarea:focus-visible {
 .story-card__copy h2 {
   margin-bottom: 30px;
   font-family: var(--display);
-  font-size: clamp(3rem, 5.5vw, 6.4rem);
-  font-weight: 500;
-  letter-spacing: -0.045em;
-  line-height: 0.94;
+  font-size: clamp(2.3rem, 4.2vw, 4.5rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.08;
+  font-style: normal;
+  text-transform: uppercase;
 }
 
 .story-card__copy > p:not(.eyebrow) {
@@ -1319,9 +1335,9 @@ textarea:focus-visible {
 
 .trust-item strong {
   margin-bottom: 3px;
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 1.08rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .trust-item span {
@@ -1346,10 +1362,12 @@ textarea:focus-visible {
   max-width: 900px;
   margin-bottom: 0;
   font-family: var(--display);
-  font-size: clamp(4rem, 8vw, 8.5rem);
-  font-weight: 500;
-  letter-spacing: -0.052em;
-  line-height: 0.87;
+  font-size: clamp(3rem, 6.3vw, 6.5rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.08;
+  font-style: normal;
+  text-transform: uppercase;
 }
 
 .page-hero__aside {
@@ -1475,9 +1493,9 @@ textarea:focus-visible {
 
 .catalog-empty h2 {
   margin-bottom: 10px;
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 2rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .catalog-empty p {
@@ -1538,11 +1556,11 @@ textarea:focus-visible {
 
 .product-info h1 {
   margin-bottom: 18px;
-  font-family: var(--display);
-  font-size: clamp(2.8rem, 5vw, 5.8rem);
+  font-family: var(--sans);
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
   font-weight: 500;
-  letter-spacing: -0.04em;
-  line-height: 0.96;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
 .product-info__price {
@@ -1659,10 +1677,12 @@ textarea:focus-visible {
 .cart-page h1 {
   margin-bottom: 50px;
   font-family: var(--display);
-  font-size: clamp(3.6rem, 7vw, 7.6rem);
-  font-weight: 500;
-  letter-spacing: -0.05em;
-  line-height: 0.9;
+  font-size: clamp(3rem, 6.3vw, 6.5rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.08;
+  font-style: normal;
+  text-transform: uppercase;
 }
 
 .cart-layout {
@@ -1697,9 +1717,9 @@ textarea:focus-visible {
 
 .cart-item__details h2 {
   margin-bottom: 5px;
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 1.35rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .cart-item__details p {
@@ -1755,9 +1775,9 @@ textarea:focus-visible {
 
 .cart-summary h2 {
   margin-bottom: 24px;
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 1.8rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .summary-line {
@@ -1779,9 +1799,9 @@ textarea:focus-visible {
 }
 
 .summary-total strong {
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 1.5rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .cart-summary__note {
@@ -1807,9 +1827,9 @@ textarea:focus-visible {
 
 .cart-empty h2 {
   margin-bottom: 10px;
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 2.4rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .cart-empty p {
@@ -1832,10 +1852,12 @@ textarea:focus-visible {
 .editorial-intro h1 {
   margin-bottom: 0;
   font-family: var(--display);
-  font-size: clamp(4rem, 8vw, 8rem);
-  font-weight: 500;
-  letter-spacing: -0.052em;
-  line-height: 0.87;
+  font-size: clamp(3rem, 6.3vw, 6.5rem);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.08;
+  font-style: normal;
+  text-transform: uppercase;
 }
 
 .editorial-copy {
@@ -1845,7 +1867,7 @@ textarea:focus-visible {
 
 .editorial-copy .lead {
   color: var(--ink);
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: clamp(1.6rem, 3vw, 2.7rem);
   font-weight: 500;
   letter-spacing: -0.025em;
@@ -1880,9 +1902,9 @@ textarea:focus-visible {
 
 .value-card h2 {
   margin-bottom: 12px;
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 2.1rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .value-card p {
@@ -1928,7 +1950,7 @@ textarea:focus-visible {
 
 .content-section h1,
 .content-section h2 {
-  font-family: var(--display);
+  font-family: var(--sans);
   font-weight: 500;
   letter-spacing: -0.03em;
 }
@@ -1960,9 +1982,9 @@ textarea:focus-visible {
 .contact-card strong {
   display: block;
   margin-bottom: 7px;
-  font-family: var(--display);
+  font-family: var(--sans);
   font-size: 1.25rem;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 /* Footer */
@@ -2180,7 +2202,7 @@ textarea:focus-visible {
   }
 
   .hero h1 {
-    font-size: clamp(4.4rem, 19vw, 7rem);
+    font-size: clamp(3rem, 14.5vw, 5.8rem);
   }
 
   .section-heading {
@@ -2189,7 +2211,7 @@ textarea:focus-visible {
   }
 
   .section-heading h2 {
-    font-size: clamp(2.9rem, 12vw, 4.8rem);
+    font-size: clamp(2.1rem, 9vw, 3.6rem);
   }
 
   .category-grid {
@@ -2236,7 +2258,7 @@ textarea:focus-visible {
 
   .page-hero h1,
   .editorial-intro h1 {
-    font-size: clamp(4rem, 18vw, 7rem);
+    font-size: clamp(2.6rem, 12vw, 5rem);
   }
 
   .catalog-layout {
@@ -2430,12 +2452,12 @@ textarea:focus-visible {
 .product-card:hover .product-visual--photo img { transform: scale(1.025); }
 .photo-fallback { padding: 22px; color: var(--muted); font-size: .8rem; text-align: center; }
 .product-card__shipping { margin: 5px 0 0; color: #52634f; font-size: .68rem; }
-.product-card__title { font-size: 1.18rem; line-height: 1.35; }
+.product-card__title { font-size: 1rem; font-weight: 500; line-height: 1.45; letter-spacing: 0; }
 body[data-page="catalog"] .page-hero { padding-block: 58px; }
-body[data-page="catalog"] .page-hero h1 { font-size: clamp(3.5rem, 6vw, 6rem); line-height: .98; }
+body[data-page="catalog"] .page-hero h1 { font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1.08; }
 .catalog-controls { margin-bottom: 20px; }
 .catalog-segments { display: flex; flex-wrap: wrap; gap: 22px; border-bottom: 1px solid var(--line); }
-.catalog-segments button { position: relative; padding: 0 0 17px; border: 0; background: transparent; color: var(--muted); font: 500 1.25rem var(--display); }
+.catalog-segments button { position: relative; padding: 0 0 17px; border: 0; background: transparent; color: var(--muted); font: 500 1rem var(--sans); }
 .catalog-segments button[aria-pressed="true"] { color: var(--ink); }
 .catalog-segments button[aria-pressed="true"]::after { position: absolute; content: ""; height: 2px; background: var(--ink); bottom: -1px; left: 0; right: 0; }
 .catalog-collections { display: flex; flex-wrap: wrap; gap: 8px; padding: 22px 0; }
@@ -2465,7 +2487,7 @@ body[data-page="catalog"] .page-hero h1 { font-size: clamp(3.5rem, 6vw, 6rem); l
 .gallery-thumb { flex: 0 0 70px; width: 70px; height: 88px; padding: 3px; border: 1px solid var(--line); background: #f4f3f0; }
 .gallery-thumb[aria-pressed="true"] { border: 2px solid var(--ink); padding: 2px; }
 .gallery-thumb img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
-.product-info h1 { font-size: clamp(2.3rem, 3.5vw, 4rem); line-height: 1.05; }
+.product-info h1 { font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: 1.2; }
 .product-free-shipping { display: flex; align-items: center; gap: 9px; margin: -6px 0 22px; color: #52634f; font-size: .78rem; }
 .product-free-shipping svg { width: 21px; fill: none; stroke: currentColor; stroke-width: 1.4; }
 .size-option:disabled, .size-option:disabled:hover { background: #f4f3f0; border-color: var(--line); color: #888; cursor: not-allowed; text-decoration: line-through; }
@@ -2494,7 +2516,7 @@ body[data-page="catalog"] .page-hero h1 { font-size: clamp(3.5rem, 6vw, 6rem); l
   .product-card__footer .icon-link { width: 28px; height: 28px; }
   .catalog-toolbar { gap: 8px; }
   .catalog-segments { gap: 18px; }
-  .catalog-segments button { font-size: 1.14rem; }
+  .catalog-segments button { font-size: 1rem; }
   .catalog-collections { gap: 6px; padding-block: 18px; }
   .catalog-collections button { font-size: .65rem; padding-inline: 10px; }
   .gallery-thumb { flex-basis: 58px; width: 58px; height: 73px; }

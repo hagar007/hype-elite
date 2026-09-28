@@ -13,6 +13,10 @@ Base estática, responsiva e pronta para GitHub Pages. O projeto foi organizado 
 - Workflow pronto para publicação automática no GitHub Pages.
 - Layout responsivo para computador, tablet e celular.
 
+## Tipografia
+
+A interface usa a pilha `Helvetica Now Text`, `Helvetica Neue`, Helvetica e Arial. Os destaques usam `NikeFuturaND-CnXBold` ou `Futura Condensed Extra Bold` quando essas fontes estão instaladas no aparelho; o fallback incluído é Anton, sob SIL Open Font License (`assets/fonts/OFL-Anton.txt`). As fontes proprietárias da Nike não são distribuídas pelo projeto. Para reproduzir as mesmas faces em todos os aparelhos, será necessário fornecer arquivos com licença para uso na web. O fallback Anton é servido pelo próprio site, sem depender de serviços externos.
+
 ## Estrutura principal
 
 ```text
