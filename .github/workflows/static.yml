@@ -39,9 +39,11 @@ jobs:
         with:
           node-version: '22'
       - name: Validate catalog rules
-        run: node --test tests/catalog.test.mjs
+        run: node --test tests/*.test.mjs
       - name: Update catalog, prices and availability
         run: node scripts/sync-catalog.mjs
+      - name: Update imported sneakers
+        run: node scripts/sync-sneakers.mjs
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

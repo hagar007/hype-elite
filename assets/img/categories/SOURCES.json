@@ -1,0 +1,74 @@
+[
+  {
+    "category": "camisas-de-time",
+    "file": "camisas-de-time.webp",
+    "source": "https://catalogopro.app/?tab=models",
+    "credit": "Fornecedor MIC",
+    "license": "Foto de catálogo fornecido pelo usuário",
+    "usage": "Capa temática da categoria; não representa estoque de categoria vazia.",
+    "processing": "Redimensionamento/recorte e compressão. Sem geração por IA."
+  },
+  {
+    "category": "tenis",
+    "file": "tenis.webp",
+    "source": "https://catalogoaguiar.netlify.app/prod-importado-adidas-adizero",
+    "credit": "Catálogo Aguiar",
+    "license": "Foto de catálogo fornecido pelo usuário",
+    "usage": "Capa temática da categoria; não representa estoque de categoria vazia.",
+    "processing": "Redimensionamento/recorte e compressão. Sem geração por IA."
+  },
+  {
+    "category": "meias",
+    "file": "meias.webp",
+    "source": "https://meucatalogotenis.netlify.app/fotos/meias/meias-cano-medio/001.jpg",
+    "credit": "Catálogo Aguiar",
+    "license": "Foto de catálogo fornecido pelo usuário",
+    "usage": "Capa temática da categoria; não representa estoque de categoria vazia.",
+    "processing": "Redimensionamento/recorte e compressão. Sem geração por IA."
+  },
+  {
+    "category": "academia",
+    "file": "academia.webp",
+    "source": "https://unsplash.com/photos/kVX6MBa2uNk",
+    "credit": "Gordon Cowie",
+    "license": "Unsplash License",
+    "usage": "Capa temática da categoria; não representa estoque de categoria vazia.",
+    "processing": "Redimensionamento/recorte e compressão. Sem geração por IA."
+  },
+  {
+    "category": "bones",
+    "file": "bones.webp",
+    "source": "https://unsplash.com/photos/p98GwQHzYPQ",
+    "credit": "Blake Wisz",
+    "license": "Unsplash License",
+    "usage": "Capa temática da categoria; não representa estoque de categoria vazia.",
+    "processing": "Redimensionamento/recorte e compressão. Sem geração por IA."
+  },
+  {
+    "category": "papetes-e-slides",
+    "file": "papetes-e-slides.webp",
+    "source": "https://unsplash.com/photos/2dcsWYYF9wk",
+    "credit": "Vitaly Mazur",
+    "license": "Unsplash License",
+    "usage": "Capa temática da categoria; não representa estoque de categoria vazia.",
+    "processing": "Redimensionamento/recorte e compressão. Sem geração por IA."
+  },
+  {
+    "category": "sapatos",
+    "file": "sapatos.webp",
+    "source": "https://unsplash.com/photos/r6yad26A_qc",
+    "credit": "rupixen",
+    "license": "Unsplash License",
+    "usage": "Capa temática da categoria; não representa estoque de categoria vazia.",
+    "processing": "Redimensionamento/recorte e compressão. Sem geração por IA."
+  },
+  {
+    "category": "acessorios",
+    "file": "acessorios.webp",
+    "source": "https://unsplash.com/photos/ehubyT53uqI",
+    "credit": "Edem Tudzi",
+    "license": "Unsplash License",
+    "usage": "Capa temática da categoria; não representa estoque de categoria vazia.",
+    "processing": "Redimensionamento/recorte e compressão. Sem geração por IA."
+  }
+]

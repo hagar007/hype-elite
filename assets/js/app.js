@@ -103,7 +103,7 @@
 
   function productVisual(product, className) {
     if (product.photos && product.photos.length) {
-      return `<div class="product-visual product-visual--photo ${className || ""}"><img src="${escapeHtml(product.photoPreview ? path(product.photoPreview) : product.photos[0])}" alt="${escapeHtml(product.name)}" width="600" height="750" loading="lazy" decoding="async"></div>`;
+      return `<div class="product-visual product-visual--photo ${className || ""}"><img src="${escapeHtml(product.photoPreview ? (/^(?:https?:)?\/\//.test(product.photoPreview) ? product.photoPreview : path(product.photoPreview)) : product.photos[0])}" alt="${escapeHtml(product.name)}" width="600" height="750" loading="lazy" decoding="async"></div>`;
     }
     const category = getCategory(product.category);
     const label = category ? category.name : "Hype Elite";
@@ -200,7 +200,7 @@
       <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
       <div class="announcement">
         <div class="shell announcement__inner">
-          <span>Frete grátis em camisas e kits</span>
+          <span>Frete grátis em camisas, kits e tênis</span>
         </div>
       </div>
       <header class="site-header" data-sticky-header>

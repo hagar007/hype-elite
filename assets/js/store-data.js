@@ -230,6 +230,26 @@
     window.HYPE_ELITE_STORE.catalog = window.HYPE_ELITE_CATALOG_META;
     window.HYPE_ELITE_STORE.settings.catalogStatus = "published";
   }
+  if (Array.isArray(window.HYPE_ELITE_SNEAKER_PRODUCTS)) {
+    window.HYPE_ELITE_STORE.products = [
+      ...window.HYPE_ELITE_STORE.products.filter(product => product.category !== "tenis"),
+      ...window.HYPE_ELITE_SNEAKER_PRODUCTS,
+    ];
+    window.HYPE_ELITE_STORE.sneakers = window.HYPE_ELITE_SNEAKER_META;
+  }
+  window.HYPE_ELITE_STORE.categories.forEach(category => {
+    category.cover = `assets/img/categories/${category.id}.webp`;
+    category.coverAlt = {
+      "camisas-de-time": "Camisa de time do catálogo",
+      "tenis": "Tênis importado do catálogo",
+      "meias": "Par de meias",
+      "academia": "Roupa esportiva para treino",
+      "bones": "Boné",
+      "papetes-e-slides": "Par de slides",
+      "sapatos": "Sapatos de couro",
+      "acessorios": "Óculos e relógio",
+    }[category.id];
+  });
   // Reviewed close-up photos from the existing supplier galleries.
   const campaignPhotos = {"mic-6ab416efee0db68cf42877ad": {"photo": "https://base44.app/api/apps/69386f6ce9fe29121d66f65f/files/mp/public/69386f6ce9fe29121d66f65f/15c05be35_shopify_1790251197201.jpg", "preview": "assets/img/campaign/madrid-640.webp"}, "mic-6ab6a089105ec3e5f46bd823": {"photo": "https://base44.app/api/apps/69386f6ce9fe29121d66f65f/files/mp/public/69386f6ce9fe29121d66f65f/21ea8573f_shopify_1790353540092.jpg", "preview": "assets/img/campaign/retro-640.webp"}, "mic-6ab7d3066a4e45d17b42bc65": {"photo": "https://base44.app/api/apps/69386f6ce9fe29121d66f65f/files/mp/public/69386f6ce9fe29121d66f65f/cacdbeb74_shopify_1790432003161.jpg", "preview": "assets/img/campaign/nacionais-640.webp"}, "mic-6aaa7d06da710689ca68299d": {"photo": "https://base44.app/api/apps/69386f6ce9fe29121d66f65f/files/mp/public/69386f6ce9fe29121d66f65f/edd896a8a_shopify_1790252389102.jpg", "preview": "assets/img/campaign/selecoes-640.webp"}};
   window.HYPE_ELITE_STORE.campaignProductIds = Object.keys(campaignPhotos);

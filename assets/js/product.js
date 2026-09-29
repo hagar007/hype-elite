@@ -14,7 +14,7 @@
   let activePhoto = 0;
   document.title = `${product.name} — Hype Elite`;
   const e = api.escapeHtml;
-  const status = !product.available ? "Indisponível no momento" : "Disponível para pedido";
+  const status = !product.available ? "Indisponível no momento" : product.availabilityConfirmation ? "Sob encomenda · disponibilidade a confirmar" : "Disponível para pedido";
   const gallery = photos.length ? `
     <div class="product-gallery product-gallery--photos" aria-label="Fotos de ${e(product.name)}">
       <a class="product-visual product-visual--photo product-gallery__main" data-gallery-link href="${e(photos[0])}" target="_blank" rel="noopener" aria-label="Abrir foto ampliada">
@@ -31,7 +31,7 @@
         <h1>${e(product.name)}</h1>
         <p class="product-info__price" data-product-price>${api.formatPrice(api.getProductPrice(product, selectedSize))}</p>
         ${product.freeShipping ? `<p class="product-free-shipping">${api.icon("truck")} Frete grátis para todo o Brasil</p>` : ""}
-        <div class="product-options"><div class="product-options__label"><span>Escolha o tamanho</span><span data-size-value>${e(selectedSize || "Indisponível")}</span></div>
+        <div class="product-options"><div class="product-options__label"><span>${product.kind === "sneaker" ? "Escolha a numeração" : "Escolha o tamanho"}</span><span data-size-value>${e(selectedSize || "Indisponível")}</span></div>
           <div class="size-grid" role="group" aria-label="Tamanhos disponíveis">${product.sizes.map(size => {
             const available = api.isSizeAvailable(product, size);
             const label = product.variants?.find(item => item.size === size)?.label || size;

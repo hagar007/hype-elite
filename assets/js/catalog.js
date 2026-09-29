@@ -4,6 +4,9 @@
   const store = api.store;
   const params = new URLSearchParams(window.location.search);
   const activeCategory = document.body.dataset.category || params.get("categoria") || "all";
+  const hasSneakers = activeCategory === "tenis";
+  const brands = [...new Set(store.products.filter(product => product.published && product.kind === "sneaker").map(product => product.brand))].sort();
+  let brand = hasSneakers && brands.includes(params.get("marca")) ? params.get("marca") : "";
   const hasFootball = activeCategory === "all" || activeCategory === "camisas-de-time";
   const groups = [["", "Todos"], ["masculino", "Masculino"], ["feminino", "Feminino"], ["infantil", "Infantil"]];
   const collections = [["", "Todas as coleções"], ["nacionais", "Nacionais"], ["internacionais", "Internacionais"], ["selecoes", "Seleções"], ["retro", "Retrô"]];
@@ -23,12 +26,12 @@
 
   const baseProducts = store.products.filter(product => product.published && (activeCategory === "all" || product.category === activeCategory));
   const meta = activeCategory === "all"
-    ? { name: "Todo o catálogo", description: "Encontre seu próximo favorito. Explore clubes, seleções e peças para vestir o futebol no seu dia a dia." }
+    ? { name: "Todo o catálogo", description: "Encontre seu próximo favorito. Explore camisas de time e tênis importados." }
     : api.getCategory(activeCategory) || { name: "Catálogo", description: "Explore a seleção Hype Elite." };
   const cover = document.querySelector(".page-hero");
   if (cover) cover.innerHTML = `<div class="shell catalog-cover__inner">
-    <div><nav class="breadcrumb" aria-label="Navegação estrutural"><a href="${api.path("index.html")}">Início</a><span aria-hidden="true">/</span><span>Catálogo</span></nav><h1>${api.escapeHtml(meta.name)}</h1></div>
-    ${hasFootball ? `<img src="${api.path("assets/img/campaign/madrid-640.webp")}" alt="Detalhe de uma camisa do catálogo" width="124" height="140" decoding="async" data-catalog-cover>` : ""}
+    <div><nav class="breadcrumb" aria-label="Navegação estrutural"><a href="${api.path("index.html")}">Início</a><span aria-hidden="true">/</span><span>Catálogo</span></nav><h1>${api.escapeHtml(meta.name)}</h1>${hasSneakers ? '<p class="catalog-cover__note">Importados · Frete grátis<br>Sob encomenda</p>' : ""}</div>
+    ${meta.cover ? `<img src="${api.path(meta.cover)}" alt="${api.escapeHtml(meta.coverAlt)}" width="124" height="140" decoding="async" data-catalog-cover>` : ""}
   </div>`;
   document.title = `${meta.name} — Hype Elite`;
   const categoryTarget = document.querySelector("[data-category-filters]");
@@ -41,12 +44,13 @@
   controls.className = "catalog-controls";
   controls.innerHTML = `
     <div class="catalog-search-row">
-      <label class="catalog-search">${api.icon("search")}<span class="sr-only">Buscar por time ou modelo</span><input type="search" data-catalog-search placeholder="Seu time ou modelo" value="${api.escapeHtml(query)}"></label>
+      <label class="catalog-search">${api.icon("search")}<span class="sr-only">Buscar por marca, time ou modelo</span><input type="search" data-catalog-search placeholder="${hasSneakers ? "Marca ou modelo" : "Seu time ou modelo"}" value="${api.escapeHtml(query)}"></label>
       <button class="catalog-filter-toggle" type="button" data-advanced-toggle aria-expanded="false" aria-controls="catalog-filter-panel">Filtros <span class="catalog-filter-count" data-filter-count></span></button>
     </div>
     <div class="catalog-filter-panel" id="catalog-filter-panel" hidden>
       ${hasFootball ? `<div class="catalog-collections" role="group" aria-label="Coleções">${collections.map(([value, label]) => `<button type="button" data-collection="${value}" aria-pressed="${collection === value}">${label}</button>`).join("")}</div>` : ""}
       <div class="catalog-refinements">
+        ${hasSneakers ? `<label class="catalog-type"><span>Marca</span><select data-sneaker-brand><option value="">Todas as marcas</option>${brands.map(value => `<option value="${api.escapeHtml(value)}" ${brand === value ? "selected" : ""}>${api.escapeHtml(value)}</option>`).join("")}</select></label>` : ""}
         <label class="catalog-type catalog-category-select"><span>Categoria</span><select data-mobile-category><option value="all">Todo o catálogo</option>${store.categories.map(category => `<option value="${api.escapeHtml(category.id)}" ${category.id === activeCategory ? "selected" : ""}>${api.escapeHtml(category.name)}</option>`).join("")}</select></label>
         ${hasFootball ? `<label class="catalog-type"><span>Modelo</span><select data-model-type>${types.map(([value, label]) => `<option value="${value}" ${type === value ? "selected" : ""}>${label}</option>`).join("")}</select></label>` : ""}
       </div>
@@ -67,7 +71,8 @@
     const terms = api.normalizeSearch(query).trim().split(/\s+/).filter(Boolean);
     return baseProducts.filter(product => {
       const haystack = api.normalizeSearch(`${product.name} ${product.shortDescription} ${product.team || ""}`);
-      return (!audience || product.gender === audience)
+      return (!brand || product.brand === brand)
+        && (!audience || product.gender === audience)
         && (!collection || (collection === "retro" ? product.retro : product.collection === collection))
         && (!type || product.type === type)
         && (!onlyAvailable || product.available)
@@ -85,10 +90,10 @@
 
   function render() {
     const products = filteredProducts();
-    const refinements = [collection, type, onlyAvailable].filter(Boolean).length;
+    const refinements = [brand, collection, type, onlyAvailable].filter(Boolean).length;
     controls.querySelector("[data-filter-count]").textContent = refinements ? `(${refinements})` : "";
     const coverPhoto = document.querySelector("[data-catalog-cover]");
-    if (coverPhoto) {
+    if (coverPhoto && activeCategory === "camisas-de-time") {
       const image = { nacionais: "nacionais", internacionais: "madrid", selecoes: "selecoes", retro: "retro" }[collection] || "madrid";
       coverPhoto.src = api.path(`assets/img/campaign/${image}-640.webp`);
     }
@@ -97,7 +102,7 @@
     target.innerHTML = products.length ? products.slice(0, limit).map(api.productCard).join("")
       : !baseProducts.length
         ? `<div class="catalog-empty"><div><h2>Novidades em breve.</h2><p>Enquanto isso, encontre seu próximo manto.</p><a class="button" href="${api.path("categorias/camisas-de-time/")}">Explorar camisas</a></div></div>`
-        : '<div class="catalog-empty"><div><h2>Nenhum modelo encontrado.</h2><p>Tente outro time ou ajuste os filtros.</p><button class="text-link" type="button" data-empty-reset>Limpar filtros</button></div></div>';
+        : '<div class="catalog-empty"><div><h2>Nenhum modelo encontrado.</h2><p>Tente outra busca ou ajuste os filtros.</p><button class="text-link" type="button" data-empty-reset>Limpar filtros</button></div></div>';
     progress.textContent = products.length ? `Exibindo ${Math.min(limit, products.length)} de ${products.length} produtos` : "";
     more.hidden = products.length <= limit;
     controls.querySelectorAll("[data-audience]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.audience === audience)));
@@ -109,7 +114,7 @@
   function update() {
     limit = 24;
     const url = new URL(window.location.href);
-    for (const [key, value] of Object.entries({ publico: audience, colecao: collection, modelo: type, q: query.trim(), disponivel: onlyAvailable ? "1" : "", ordem: sortMode === "featured" ? "" : sortMode })) {
+    for (const [key, value] of Object.entries({ marca: brand, publico: audience, colecao: collection, modelo: type, q: query.trim(), disponivel: onlyAvailable ? "1" : "", ordem: sortMode === "featured" ? "" : sortMode })) {
       if (value) url.searchParams.set(key, value); else url.searchParams.delete(key);
     }
     window.history.replaceState(null, "", url);
@@ -117,7 +122,8 @@
   }
 
   function reset() {
-    audience = collection = type = query = "";
+    brand = audience = collection = type = query = "";
+    if (hasSneakers) controls.querySelector("[data-sneaker-brand]").value = "";
     onlyAvailable = false;
     sortMode = "featured";
     if (sort) sort.value = sortMode;
@@ -142,6 +148,7 @@
   controls.querySelector("[data-in-stock]").addEventListener("change", event => { onlyAvailable = event.target.checked; update(); });
   controls.querySelector("[data-reset-filters]").addEventListener("click", reset);
   if (hasFootball) controls.querySelector("[data-model-type]").addEventListener("change", event => { type = event.target.value; update(); });
+  if (hasSneakers) controls.querySelector("[data-sneaker-brand]").addEventListener("change", event => { brand = event.target.value; update(); });
   if (sort) sort.addEventListener("change", event => { sortMode = event.target.value; update(); });
   more.addEventListener("click", () => {
     const oldLimit = limit;
