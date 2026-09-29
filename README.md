@@ -61,7 +61,7 @@ Depois acesse `http://localhost:8080`.
 
 Os modelos e todas as fotos vêm do catálogo público `https://catalogopro.app/?tab=models`. Produtos arquivados saem da vitrine. O importador cruza o ID Shopify ou o nome exato normalizado com o catálogo público da MIC; diferenças de nome revisadas ficam em `scripts/catalog-mappings.json`. Não há correspondência aproximada entre modelos parecidos.
 
-**Regra vigente: preço normal de cada variação na MIC + R$75,00.** O acréscimo é fixo, inclusive para kits adultos e infantis (uma vez por kit). Não se usam preço comparativo, desconto de Pix, valores antigos de R$154,90/R$139,90 ou margem percentual. O cálculo é feito em centavos.
+**Regra vigente: preço normal de cada variação na MIC + R$75,00, com o preço de venda terminado em R$0,99.** O acréscimo é fixo, inclusive para kits adultos e infantis (uma vez por kit). Não se usam preço comparativo, desconto de Pix, valores antigos de R$154,90/R$139,90 ou margem percentual. O cálculo é feito em centavos. Depois do acréscimo, o valor mantém a parte inteira e termina em 99 centavos: R$175,18 → R$175,99; R$175,00 → R$175,99; R$175,99 permanece igual. Essa regra vale para cada tamanho e não reduz a margem.
 
 Um tamanho só pode entrar na sacola se estiver disponível tanto no catálogo quanto na MIC e tiver preço confirmado. As fontes públicas não informam a quantidade de unidades: a loja não inventa esses números. Modelos sem correspondência/preço atual continuam visíveis, com compra bloqueada. Todas as camisas e kits têm frete grátis.
 
@@ -80,7 +80,7 @@ A vitrine tem busca por time/modelo, filtros combináveis de público, nacionais
 
 ## Tênis importados
 
-O importador `scripts/sync-sneakers.mjs` lê exclusivamente os links de modelos presentes em `https://catalogoaguiar.netlify.app/cat-importado`. As fotos e identificadores permanecem vinculados a cada modelo. O preço público associado ao ID recebe **R$150,00 por par**, calculados em centavos. Todos os tênis têm frete grátis. Preços ausentes bloqueiam o modelo.
+O importador `scripts/sync-sneakers.mjs` lê exclusivamente os links de modelos presentes em `https://catalogoaguiar.netlify.app/cat-importado`. As fotos e identificadores permanecem vinculados a cada modelo. O preço público associado ao ID recebe **R$150,00 por par**, calculados em centavos, com ajuste do preço de venda para terminar em 99 centavos no mesmo real. Todos os tênis têm frete grátis. Preços ausentes bloqueiam o modelo.
 
 A fonte divulga intervalos de numeração, não estoque unitário em tempo real. A vitrine e a sacola sinalizam **sob encomenda, disponibilidade a confirmar**. A seleção de tamanho não afirma reserva de estoque. Antes de ligar pagamentos automáticos, será necessário confirmar a disponibilidade com o fornecedor.
 

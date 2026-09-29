@@ -1,8 +1,9 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
+import { MARKUP_CENTS, supplierCents, retailPrice } from "../shared/pricing.mjs";
+export { MARKUP_CENTS, supplierCents, retailPrice } from "../shared/pricing.mjs";
 
-export const MARKUP_CENTS = 7500;
 const ROOT = fileURLToPath(new URL("../", import.meta.url));
 const APP_ID = "69386f6ce9fe29121d66f65f";
 const SUPPLIER = "https://miccamisasdetime.com.br";
@@ -17,18 +18,6 @@ export function normalizeSize(value = "") {
   const text = String(value).trim().toUpperCase();
   const child = text.match(/^(?:TAM\s*|T)(\d+)/);
   return child ? `T${child[1]}` : text;
-}
-
-export function supplierCents(value) {
-  const match = String(value ?? "").match(/^(\d+)(?:\.(\d{1,2}))?$/);
-  if (!match) return null;
-  const cents = Number(match[1]) * 100 + Number((match[2] || "").padEnd(2, "0"));
-  return Number.isSafeInteger(cents) && cents > 0 ? cents : null;
-}
-
-export function retailPrice(value) {
-  const cents = supplierCents(value);
-  return cents === null ? null : (cents + MARKUP_CENTS) / 100;
 }
 
 function publicImage(url) {

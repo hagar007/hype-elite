@@ -12,8 +12,8 @@ function fixture() {
   };
 }
 
-test("acréscimo fixo de 75 reais, sem porcentagem nem arredondamento comercial", () => {
-  for (const [cost, price] of [["40", 115], ["60", 135], ["80", 155], ["100", 175], ["200", 275], ["72.81", 147.81], ["109.27", 184.27]]) {
+test("acréscimo de 75 reais com final de 99 centavos no mesmo real", () => {
+  for (const [cost, price] of [["40", 115.99], ["60", 135.99], ["80", 155.99], ["100", 175.99], ["200", 275.99], ["72.81", 147.99], ["109.27", 184.99]]) {
     assert.equal(retailPrice(cost), price);
   }
   for (const value of [null, "", "0.00", "-10", "abc", "72,81"]) assert.equal(retailPrice(value), null);
@@ -24,8 +24,8 @@ test("cada variação conserva seu preço e só vende tamanhos disponíveis nas 
   data.supplierProducts[0].variants[1].available = false;
   const product = buildCatalog(data).products[0];
   assert.deepEqual(product.availableSizes, ["P"]);
-  assert.equal(product.price, 135);
-  assert.deepEqual(product.variants.map(v => [v.size, v.price, v.available]), [["P", 135, true], ["M", 155, false], ["G", 175, false]]);
+  assert.equal(product.price, 135.99);
+  assert.deepEqual(product.variants.map(v => [v.size, v.price, v.available]), [["P", 135.99, true], ["M", 155.99, false], ["G", 175.99, false]]);
 });
 
 test("kit infantil recebe o mesmo acréscimo fixo e normaliza o tamanho com idade", () => {
@@ -33,7 +33,7 @@ test("kit infantil recebe o mesmo acréscimo fixo e normaliza o tamanho com idad
   Object.assign(data.models[0], { name: "Kit Infantil Flamengo", is_kids_kit: true, sizes: ["T18"] });
   data.supplierProducts[0].variants = [{ option1: "Tam 18 - 4-5 anos", price: "70.00", available: true }];
   const product = buildCatalog(data).products[0];
-  assert.equal(product.price, 145);
+  assert.equal(product.price, 145.99);
   assert.equal(product.type, "kit-infantil");
   assert.equal(product.gender, "infantil");
   assert.equal(product.variants[0].label, "Tam 18 - 4-5 anos");
@@ -46,7 +46,7 @@ test("kit adulto soma 75 reais ao kit, uma única vez", () => {
   data.models[0].name = "Kit Regata e Short Flamengo";
   const product = buildCatalog(data).products[0];
   assert.equal(product.type, "kit-adulto");
-  assert.equal(product.price, 135);
+  assert.equal(product.price, 135.99);
   assert.equal(product.priceVaries, true);
   assert.equal(product.freeShipping, true);
 });
@@ -67,7 +67,7 @@ test("correspondência de nome ignora acentos e ano abreviado, mas não troca mo
   const data = fixture();
   data.models[0].shopify_product_id = "";
   data.models[0].name = "Camisa Flámengo I 26/27";
-  assert.equal(buildCatalog(data).products[0].price, 135);
+  assert.equal(buildCatalog(data).products[0].price, 135.99);
   data.models[0].name = "Camisa Feminina Flamengo I 26/27";
   const product = buildCatalog(data).products[0];
   assert.equal(product.gender, "feminino");
@@ -79,7 +79,7 @@ test("alias revisado exige ID e título da MIC, sem substituição silenciosa", 
   data.models[0].shopify_product_id = "";
   data.models[0].name = "Camisa Flamengo Tricolor";
   data.mappings = { "model-1": { productId: "10", title: "Camisa Flamengo I 26/27" } };
-  assert.equal(buildCatalog(data).products[0].price, 135);
+  assert.equal(buildCatalog(data).products[0].price, 135.99);
   data.mappings["model-1"].title = "Camisa Flamengo III 26/27";
   assert.equal(buildCatalog(data).products[0].price, null);
 });
