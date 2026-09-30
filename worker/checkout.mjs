@@ -2,6 +2,8 @@ import { loadFreshProducts } from "./sources.mjs";
 
 const encoder = new TextEncoder();
 const STRIPE_VERSION = "2026-08-26.dahlia";
+// Stable per integration: changing it between attempts would defeat idempotency.
+const INTEGRATION_IDENTIFIER = "hype_elite_checkout_ryqzndtq";
 const SESSION_ID = /^cs_(?:test_|live_)?[A-Za-z0-9]{10,240}$/;
 const REQUEST_ID = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
 
@@ -119,6 +121,7 @@ export function createHandler({ fetcher = fetch, loadProducts = loadFreshProduct
     }
     const form = new URLSearchParams({
       mode: "payment", locale: "pt-BR",
+      integration_identifier: INTEGRATION_IDENTIFIER,
       success_url: `${storeUrl(env)}pagamento.html?session_id={CHECKOUT_SESSION_ID}&pedido=${body.requestId}`,
       cancel_url: `${storeUrl(env)}carrinho.html?pagamento=cancelado`,
       "shipping_address_collection[allowed_countries][0]": "BR",

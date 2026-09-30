@@ -23,11 +23,13 @@ Use Node 22 ou superior. O Wrangler pode ser executado com `npx wrangler` na rai
    ```json
    "kv_namespaces": [{ "binding": "ORDERS", "id": "ID_REAL_DO_NAMESPACE" }]
    ```
-3. Configure `STRIPE_SECRET_KEY` e `STRIPE_WEBHOOK_SECRET` como **Secrets**, usando o painel do Cloudflare ou `npx wrangler secret put NOME --config worker/wrangler.jsonc`. Use primeiro uma conta/chave de teste. Não cole chaves em arquivos ou no chat.
+3. Crie uma **chave restrita** do Stripe (`rk_`) exclusiva para este Worker, com as permissões necessárias para criar/consultar sessões de Checkout e consultar códigos promocionais. Confira as dependências dessas permissões em um sandbox separado da produção. Salve a chave no Secret `STRIPE_SECRET_KEY` e a assinatura do webhook no Secret `STRIPE_WEBHOOK_SECRET`, usando o painel do Cloudflare ou `npx wrangler secret put NOME --config worker/wrangler.jsonc`. O nome da variável é compatível com chaves restritas; não é necessário usar uma chave de acesso total. Não cole chaves em arquivos ou no chat.
 4. No Stripe, cadastre o endereço real do Worker seguido de `/stripe/webhook`, com os eventos `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed` e `checkout.session.expired`. A versão usada nas requisições é `2026-08-26.dahlia`.
 5. Confira `STORE_URL`, ative `CHECKOUT_ENABLED: "true"` e publique o Worker. Na loja, preencha `checkoutApiUrl` com o endereço real (HTTPS, sem barra final) e ative `checkoutEnabled` em `assets/js/store-data.js`. Atualize a versão desse script na sacola e na página de pagamento e publique o Pages.
 
 Teste o fluxo completo no modo de teste antes de usar a chave de produção. O conector Stripe do ChatGPT não instala automaticamente uma chave no Worker.
+
+As sessões usam um identificador estável da integração, com sufixo de oito letras, para acompanhamento no Stripe. Ele não é uma credencial e permanece igual entre a cotação e a finalização, preservando a idempotência.
 
 ## Cupons
 
