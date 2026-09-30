@@ -102,7 +102,7 @@ As outras categorias mantêm rascunhos em `assets/js/store-data.js`, com `publis
 - disponibilidade e publicação;
 - cor do espaço visual.
 
-Para publicar um produto real, cadastre fotos e preço, confirme tamanhos/disponibilidade e defina `published: true`. O checkout continua dependente da integração segura descrita abaixo.
+Para publicar um produto real, cadastre fotos e preço, confirme tamanhos/disponibilidade e defina `published: true`. A ativação do checkout depende da configuração segura descrita abaixo.
 
 ## Publicar no GitHub Pages
 
@@ -113,10 +113,10 @@ Para publicar um produto real, cadastre fotos e preço, confirme tamanhos/dispon
 
 ## Checkout e segurança
 
-O checkout está intencionalmente desligado. O GitHub Pages é estático e não pode guardar segredos com segurança.
+O campo de cupom está disponível na sacola. A integração segura com Stripe está implementada em `worker/`, com instruções em `worker/README.md`. Os pagamentos continuam desligados até configurar o Worker, o KV, as chaves e o webhook; o GitHub Pages permanece responsável pela vitrine.
 
 - Nunca coloque uma chave secreta do Stripe em HTML ou JavaScript público.
-- A futura integração deve criar a sessão de pagamento em uma função segura no servidor.
+- O Worker cria a sessão no servidor, consulta novamente os fornecedores e confere o total no Stripe. O código do cupom pode ser salvo; desconto só aparece após a validação da sessão.
 - O painel atual é visual; autenticação e banco de dados ainda precisam ser conectados.
 - O arquivo `robots.txt` pede aos buscadores que não indexem `/painel/`, mas isso não substitui login.
 
@@ -125,5 +125,5 @@ O checkout está intencionalmente desligado. O GitHub Pages é estático e não 
 1. Confirmar modelos sem preço de origem e adicionar tabelas de medidas específicas.
 2. Definir WhatsApp, e-mail e horários oficiais de atendimento.
 3. Conectar banco de dados e login do painel.
-4. Integrar Stripe, frete e acompanhamento de pedidos.
+4. Configurar o Worker e Stripe, testar pagamentos e conectar acompanhamento de pedidos.
 5. Revisar dados empresariais e políticas antes da abertura pública.

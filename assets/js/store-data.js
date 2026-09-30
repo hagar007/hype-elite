@@ -13,6 +13,7 @@
       currency: "BRL",
       locale: "pt-BR",
       checkoutEnabled: false,
+      checkoutApiUrl: "",
       catalogStatus: "draft",
     },
 

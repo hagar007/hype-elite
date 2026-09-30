@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hype-elite-checkout",
+  "main": "checkout.mjs",
+  "compatibility_date": "2026-09-29",
+  "vars": {
+    "STORE_URL": "https://hagar007.github.io/hype-elite/",
+    "CHECKOUT_ENABLED": "false"
+  }
+  // Add an ORDERS KV binding before activation.
+  // Keep STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET in Cloudflare Secrets.
+}
